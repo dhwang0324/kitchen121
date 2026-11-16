@@ -87,6 +87,7 @@ const chickenPhotos: Photo[] = [
 
 export const partyPlatters: Section = {
   id: 'party-platter', title: '121 Party Platter',
+  photos: [{ img: 'hm-all-star', cap: 'Chicken All Star' }, { img: 'c-roll-platter', cap: 'Roll platters' }],
   items: [
     { n: 'Oriental Soy Garlic Chicken Platter', p: 35, serves: 'Serves 2 to 3' },
     { n: 'Sweet Onion Chicken Platter', p: 35, serves: 'Serves 2 to 3' },

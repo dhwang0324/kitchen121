@@ -18,20 +18,15 @@ const heroPhotos: Record<LocId, [string, string]> = { duluth: ['hot-bulgogi', 'c
     <a class="pill pill--ghost" href={other.menu}>{other.short} Menu</a>
   </PageHero>
 
-  <nav class="cats" aria-label="Menu categories">
-    <div class="container scroller">
-      {sections.map((s) => <a href={`#${s.id}`}>{s.title.replace(/^121 /, '')}</a>)}
+  <div class="menu" id="menu">
+    <div class="cats">
+      <div class="container scroller" role="tablist" aria-label="Menu categories">
+        {sections.map((s, i) => <a class="tab" role="tab" href={`#${s.id}`} id={`tab-${s.id}`} aria-controls={s.id} aria-selected={i === 0 ? 'true' : 'false'} data-id={s.id}>{s.title.replace(/^121 /, '')}</a>)}
+      </div>
     </div>
-  </nav>
-
-  <div class="menu">
     <div class="container stack">
-      <p class="legend">
-        <span><b class="raw">*</b> Served undercooked or may contain raw ingredient</span>
-        <span><b class="sp">Spicy</b> Spicy dish</span>
-      </p>
       {sections.map((s) => <MenuPanel section={s} />)}
-      <p class="fine">{RAW_NOTICE}</p>
+      <p class="fine"><b>*</b> {RAW_NOTICE}</p>
     </div>
   </div>
 
@@ -48,35 +43,39 @@ const heroPhotos: Record<LocId, [string, string]> = { duluth: ['hot-bulgogi', 'c
 </Site>
 
 <style>
+  .menu { background: var(--paper); color: var(--ink); padding-bottom: clamp(56px, 8vw, 96px); scroll-margin-top: 4.5rem; }
   .cats { position: sticky; top: 4.6rem; z-index: 40; background: var(--paper); border-bottom: 1px solid rgb(0 0 0 / .1); }
-  .scroller { display: flex; gap: .5rem; overflow-x: auto; padding-block: .7rem; scrollbar-width: none; }
+  .scroller { display: flex; gap: .5rem; overflow-x: auto; padding-block: .8rem; scrollbar-width: none; }
   .scroller::-webkit-scrollbar { display: none; }
-  .cats a { flex: none; padding: .45rem 1.1rem .35rem; border-radius: 9999px; border: 2px solid var(--ink); color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 800; font-size: 1.1rem; letter-spacing: .08em; text-transform: uppercase; line-height: 1.1; transition: background-color .2s, color .2s, border-color .2s; }
-  .cats a:hover, .cats a.on { background: var(--green); border-color: var(--green); color: #fff; }
-  .menu { background: var(--paper); color: var(--ink); padding: clamp(28px, 4vw, 48px) 0 clamp(56px, 8vw, 96px); }
-  .stack { display: grid; gap: clamp(20px, 3vw, 36px); }
-  .legend { margin: 0; display: flex; flex-wrap: wrap; gap: .4rem 1.6rem; font-size: .88rem; color: #5f5f5f; }
-  .legend span { display: inline-flex; align-items: center; gap: .35rem; }
-  .legend .raw { color: var(--green); font-size: 1.1rem; }
-  .legend .sp { padding: .12rem .4rem .08rem; border-radius: 4px; background: #c8281e; color: #fff; font-size: .62rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; line-height: 1.2; }
+  .tab { flex: none; padding: .5rem 1.15rem .4rem; border-radius: 9999px; border: 2px solid var(--ink); color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 800; font-size: 1.15rem; letter-spacing: .08em; text-transform: uppercase; line-height: 1.1; transition: background-color .2s, color .2s, border-color .2s; }
+  .tab:hover { background: rgb(20 20 20 / .08); }
+  .tab[aria-selected="true"] { background: var(--green); border-color: var(--green); color: #fff; }
+  .stack { display: grid; gap: clamp(20px, 3vw, 36px); padding-top: clamp(24px, 4vw, 44px); }
   .fine { margin: 0; font-size: .82rem; line-height: 1.5; color: #6b6b6b; }
+  .fine b { color: var(--green); }
   .order { text-align: center; background: var(--ink); padding: clamp(56px, 8vw, 104px) 0; }
   .order h2 { margin-bottom: 1.6rem; }
   .order .cta { display: flex; flex-wrap: wrap; justify-content: center; gap: .9rem; }
 </style>
 
 <script>
-  // Highlight the category chip for the section being read.
-  const chips = Array.from(document.querySelectorAll<HTMLAnchorElement>('.cats a'));
-  const byId = new Map(chips.map((c) => [c.hash.slice(1), c]));
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((es) => es.forEach((e) => {
-      if (!e.isIntersecting) return;
-      chips.forEach((c) => c.classList.remove('on'));
-      const chip = byId.get(e.target.id);
-      chip?.classList.add('on');
-      chip?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
-    }), { rootMargin: '-35% 0px -60% 0px' });
-    document.querySelectorAll('.panel[id]').forEach((p) => io.observe(p));
-  }
+  // Tabs: one category at a time. Without JavaScript every category stays visible and the tabs act as jump links.
+  const tabs = Array.from(document.querySelectorAll<HTMLAnchorElement>('.tab'));
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-panel]'));
+  const menu = document.getElementById('menu');
+  const show = (id: string, scroll = false) => {
+    if (!panels.some((p) => p.dataset.panel === id)) return;
+    tabs.forEach((t) => { const on = t.dataset.id === id; t.setAttribute('aria-selected', String(on)); if (on) { const sc = t.parentElement!; sc.scrollTo({ left: t.offsetLeft - (sc.clientWidth - t.offsetWidth) / 2 }); } });
+    panels.forEach((p) => { p.hidden = p.dataset.panel !== id; });
+    if (scroll && menu && menu.getBoundingClientRect().top < 0) menu.scrollIntoView();
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', (e) => { e.preventDefault(); show(t.dataset.id!, true); history.replaceState(null, '', `#${t.dataset.id}`); });
+    t.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+      next.focus(); show(next.dataset.id!);
+    });
+  });
+  show(location.hash.slice(1) && panels.some((p) => p.dataset.panel === location.hash.slice(1)) ? location.hash.slice(1) : tabs[0].dataset.id!);
 </script>

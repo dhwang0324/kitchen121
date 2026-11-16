@@ -18,7 +18,7 @@ import { u, LOCATIONS, HOURS, EMAIL, INSTAGRAM, INSTAGRAM_HANDLE, TAGLINE, SISTE
         <h3>{l.short}</h3>
         <p><a href={directions(l)} rel="noopener">{l.street}<br />{l.city}</a></p>
         <p><a href={`tel:${l.tel}`}>{l.phone}</a></p>
-        <p><a class="go" href={l.order} target="_blank" rel="noopener">Order online &rarr;</a></p>
+        <p><a class="go" href={l.order.clover} data-order={l.id}>Order now &rarr;</a></p>
       </div>
     ))}
     <div>

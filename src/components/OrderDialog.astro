@@ -1,49 +1,121 @@
 ---
-// "Order Online" asks which kitchen first, because each location has its own Clover ordering page.
-// Any link with data-order opens this picker; without JavaScript the link goes to the Locations page instead.
-import { LOCATIONS } from '../data/site';
+// "Order Now" pop-up, same idea as the Chicken 121 site but with a first step: pick the kitchen, then pick the service
+// (Uber Eats, DoorDash or Clover). A link with data-order opens step 1; data-order="duluth" or "hamilton-mill" opens
+// straight on that kitchen's services. Without JavaScript those links go to Clover or the Locations page.
+import { LOCATIONS, SERVICES } from '../data/site';
+const logos = import.meta.glob<{ default: ImageMetadata }>('../assets/order/*.webp', { eager: true });
+const logo = (id: string) => logos[`../assets/order/${id}.webp`].default.src;
 ---
-<dialog class="od" id="order-dialog" aria-labelledby="od-title">
-  <button class="x" type="button" aria-label="Close" data-od-close><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" /></svg></button>
-  <p class="eyebrow">Order Online</p>
-  <h2 id="od-title">Pick your kitchen</h2>
-  <div class="opts">
-    {LOCATIONS.map((l, i) => (
-      <a class="opt" href={l.order} target="_blank" rel="noopener">
-        <span class="num">{String(i + 1).padStart(2, '0')}</span>
-        <b>{l.short}</b>
-        <span class="addr">{l.street}<br />{l.city}</span>
-        <span class="go">Order from {l.short} &rarr;</span>
-      </a>
+<dialog class="om" id="order-modal" aria-labelledby="om-title">
+  <div class="card" tabindex="-1" autofocus>
+    <button class="x" type="button" aria-label="Close" data-om-close><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" /></svg></button>
+    <h2 id="om-title">Order Now</h2>
+
+    <div class="step" data-step="pick">
+      <p class="sub">Which kitchen are you ordering from?</p>
+      <div class="locs">
+        {LOCATIONS.map((l, i) => (
+          <button class="loc" type="button" data-pick={l.id}>
+            <span class="num">{String(i + 1).padStart(2, '0')}</span>
+            <b>{l.short}</b>
+            <span class="addr">{l.street}<br />{l.city}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {LOCATIONS.map((l) => (
+      <div class="step" data-step={l.id} hidden>
+        <p class="sub">Ordering from <b>{l.short}</b>. Choose where you'd like to order.</p>
+        <div class="list">
+          {SERVICES.map((s) => (
+            <a class="opt" href={l.order[s.id]} target="_blank" rel="noopener" aria-label={`Order from ${l.short} on ${s.name}`}>
+              <span class="logo"><img class="icon" src={logo(s.id)} alt="" width="240" height="240" loading="lazy" /><span class="nm">{s.name}</span></span>
+              <span class="go" aria-hidden="true">&rsaquo;</span>
+            </a>
+          ))}
+        </div>
+        <button class="back" type="button" data-om-back>&lsaquo; Change location</button>
+        <p class="note">You'll leave our site to place your order</p>
+      </div>
     ))}
   </div>
-  <p class="fine">Online ordering opens in a new tab.</p>
 </dialog>
 
 <style>
-  .od { width: min(92vw, 40rem); border: 0; border-radius: 30px; padding: clamp(1.5rem, 4vw, 2.6rem); background: var(--paper); color: var(--ink); box-shadow: 0 30px 80px rgb(0 0 0 / .5); }
-  .od::backdrop { background: rgb(0 0 0 / .65); }
-  .x { position: absolute; top: .9rem; right: .9rem; width: 2.6rem; height: 2.6rem; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; }
-  .x svg { width: 1.4rem; height: 1.4rem; fill: none; stroke: currentColor; stroke-width: 2.8; stroke-linecap: round; }
-  h2 { font-size: clamp(2.4rem, 6vw, 3.6rem); margin-bottom: 1.2rem; }
-  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
-  .opt { position: relative; display: grid; gap: .25rem; padding: 1.2rem 1.2rem 1.1rem; border-radius: 22px; background: #fff; color: var(--ink); text-decoration: none; box-shadow: 0 6px 24px rgb(0 0 0 / .07); border: 2px solid transparent; transition: border-color .2s, transform .2s; }
-  .opt:hover { border-color: var(--green); transform: translateY(-2px); }
-  .num { font-weight: 700; font-size: .8rem; color: var(--green); }
-  .opt b { font-family: var(--display); font-weight: 800; font-size: 2.1rem; line-height: 1; text-transform: uppercase; }
-  .addr { font-size: .9rem; line-height: 1.4; color: #555; }
-  .go { margin-top: .5rem; font-family: var(--display); font-weight: 800; font-size: 1.2rem; letter-spacing: .08em; text-transform: uppercase; color: var(--green); }
-  .fine { margin: 1rem 0 0; font-size: .8rem; color: #777; }
-  @media (max-width: 520px) { .opts { grid-template-columns: 1fr; } }
+  .om { --bg: #1b1b1b; --soft: #bdbdbd; border: 0; padding: 0; background: transparent; color: #fff; overflow: visible; max-width: none; max-height: none; margin: auto; width: min(92vw, 23rem); }
+  .om::backdrop { background: rgb(0 0 0 / .65); }
+  .om[open] { animation: om-in .28s cubic-bezier(.2,.7,.2,1); }
+  .om[open]::backdrop { animation: om-fade .25s ease; }
+  @keyframes om-in { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: none; } }
+  @keyframes om-fade { from { opacity: 0; } to { opacity: 1; } }
+  .card { position: relative; background: var(--bg); border-top: 5px solid var(--green); border-radius: 22px; padding: 3rem 1.25rem 1.25rem; box-shadow: 0 24px 60px rgb(0 0 0 / .45); max-height: calc(100svh - 5rem); overflow: auto; }
+  .card:focus { outline: none; }
+  .x { position: absolute; top: .9rem; right: .9rem; width: 2.4rem; height: 2.4rem; display: grid; place-items: center; border: 0; border-radius: 50%; background: #333; color: #fff; cursor: pointer; }
+  .x svg { width: 1.1rem; height: 1.1rem; fill: none; stroke: currentColor; stroke-width: 2.8; stroke-linecap: round; }
+  h2 { text-align: center; font-size: 2.4rem; line-height: 1.1; }
+  .sub { margin: .3rem 0 1.1rem; text-align: center; color: var(--soft); font-size: .95rem; }
+  .sub b { color: #fff; }
+  .step[hidden] { display: none; }
+
+  .locs, .list { display: grid; gap: .65rem; }
+  .loc, .opt { background: #fff; color: #222; border: 2px solid transparent; border-radius: 20px; box-shadow: 0 4px 12px rgb(0 0 0 / .25); cursor: pointer; text-decoration: none; font-family: inherit; transition: transform .2s, border-color .2s; }
+  .loc:hover, .loc:focus-visible, .opt:hover, .opt:focus-visible { transform: translateY(-2px); border-color: var(--leaf); outline: none; }
+  .loc { display: grid; grid-template-columns: auto 1fr; column-gap: .9rem; align-items: center; text-align: left; padding: 1rem 1.2rem; }
+  .num { grid-row: span 2; display: grid; place-items: center; width: 3rem; height: 2.4rem; padding-top: .1rem; background: var(--green); color: #fff; font-family: var(--display); font-weight: 800; font-size: 1.4rem; transform: rotate(8deg); }
+  .loc b { font-family: var(--display); font-weight: 800; font-size: 1.8rem; line-height: 1; text-transform: uppercase; }
+  .addr { font-size: .85rem; line-height: 1.35; color: #555; }
+
+  .opt { display: flex; align-items: center; justify-content: space-between; gap: .8rem; min-height: 4.1rem; padding: .7rem 1.1rem; }
+  .logo { display: flex; align-items: center; gap: .85rem; min-width: 0; }
+  .icon { flex: none; width: 2.9rem; height: 2.9rem; border-radius: 50%; border: 1px solid rgb(0 0 0 / .08); object-fit: cover; display: block; background: #fff; }
+  .nm { font-family: var(--display); font-weight: 800; font-size: 1.5rem; line-height: 1.1; text-transform: uppercase; letter-spacing: .02em; }
+  .go { color: #8a8a8a; font-size: 1.7rem; line-height: 1; }
+  .back { display: block; margin: 1.1rem auto 0; padding: .4rem .8rem; border: 0; background: none; color: var(--leaf); cursor: pointer; font-family: var(--display); font-weight: 700; font-size: 1.1rem; letter-spacing: .08em; text-transform: uppercase; }
+  .back:hover { color: #fff; }
+  .note { margin: .5rem 0 0; text-align: center; color: var(--soft); font-size: .78rem; }
+
+  @media (min-width: 768px) {
+    .om { width: min(92vw, 40rem); }
+    .card { padding: 3.4rem 2rem 1.8rem; border-radius: 24px; }
+    h2 { font-size: 3rem; }
+    .sub { margin-bottom: 1.4rem; font-size: 1.05rem; }
+    .locs { grid-template-columns: 1fr 1fr; gap: .9rem; }
+    .loc { grid-template-columns: 1fr; row-gap: .5rem; padding: 1.4rem 1.3rem; }
+    .num { grid-row: auto; margin-left: .2rem; }
+    .loc b { font-size: 2.2rem; }
+    .list { grid-template-columns: repeat(3, 1fr); gap: .9rem; }
+    .opt { flex-direction: column; justify-content: center; min-height: 8.6rem; padding: 1.2rem .6rem; border-radius: 24px; text-align: center; }
+    .logo { flex-direction: column; gap: .7rem; }
+    .icon { width: 4rem; height: 4rem; }
+    .nm { font-size: 1.6rem; }
+    .go { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .om[open], .om[open]::backdrop { animation: none; } .loc, .opt { transition: none; } }
 </style>
 
 <script>
-  const dialog = document.getElementById('order-dialog') as HTMLDialogElement | null;
-  if (dialog && typeof dialog.showModal === 'function') {
+  const dlg = document.getElementById('order-modal') as HTMLDialogElement | null;
+  if (dlg && typeof dlg.showModal === 'function') {
+    const steps = Array.from(dlg.querySelectorAll<HTMLElement>('[data-step]'));
+    const go = (step: string) => {
+      const known = steps.some((s) => s.dataset.step === step) ? step : 'pick';
+      steps.forEach((s) => { s.hidden = s.dataset.step !== known; });
+    };
     document.addEventListener('click', (e) => {
-      const t = e.target as HTMLElement;
-      if (t.closest('[data-order]')) { e.preventDefault(); dialog.showModal(); return; }
-      if (t.closest('[data-od-close]') || t === dialog) dialog.close();
+      const opener = (e.target as HTMLElement).closest<HTMLElement>('[data-order]');
+      if (!opener) return;
+      e.preventDefault();
+      go(opener.dataset.order || 'pick');
+      if (!dlg.open) { dlg.showModal(); document.documentElement.style.overflow = 'hidden'; }
     });
+    dlg.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      const pick = t.closest<HTMLElement>('[data-pick]');
+      if (pick) return go(pick.dataset.pick!);
+      if (t.closest('[data-om-back]')) return go('pick');
+      if (t === dlg || t.closest('[data-om-close]')) dlg.close();
+    });
+    dlg.addEventListener('close', () => { document.documentElement.style.overflow = ''; });
   }
 </script>

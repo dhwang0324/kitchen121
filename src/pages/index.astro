@@ -41,7 +41,7 @@ const fromPrice = Math.min(...partyPlatters.items.map((i) => i.p));
         <h1><span class="l">Clean food</span> <span class="l">for your</span> <span class="l block"><span>Body &amp; Soul</span></span></h1>
         <p class="lead">Signature chicken, sushi rolls and bowls by Chef Ji Young Lee.</p>
         <div class="cta">
-          <a class="pill" href={u('locations/')} data-order><span>Order Online</span><span class="arrow">&rarr;</span></a>
+          <a class="pill" href={u('locations/')} data-order><span>Order Now</span><span class="arrow">&rarr;</span></a>
           <a class="pill pill--ghost" href="#kitchens">See the Menus</a>
         </div>
       </div>
@@ -69,7 +69,7 @@ const fromPrice = Math.min(...partyPlatters.items.map((i) => i.p));
               </dl>
               <div class="cta">
                 <a class="pill" href={l.menu}><span>View Menu</span><span class="arrow">&rarr;</span></a>
-                <a class="pill pill--ink" href={l.order} target="_blank" rel="noopener">Order Online</a>
+                <a class="pill pill--ink" href={l.order.clover} data-order={l.id}>Order Now</a>
               </div>
             </div>
           </article>

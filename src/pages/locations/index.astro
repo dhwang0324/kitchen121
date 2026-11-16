@@ -23,7 +23,7 @@ import { LOCATIONS, HOURS, EMAIL, address, directions } from '../../data/site';
             <div class="cta">
               <a class="pill" href={directions(l)} rel="noopener"><span>Get Directions</span><span class="arrow">&rarr;</span></a>
               <a class="pill pill--ink" href={l.menu}>Menu</a>
-              <a class="pill pill--ink" href={l.order} target="_blank" rel="noopener">Order Online</a>
+              <a class="pill pill--ink" href={l.order.clover} data-order={l.id}>Order Now</a>
             </div>
           </div>
           <Map query={`Kitchen 121 ${address(l)}`} title={`Map showing ${l.name}`} />

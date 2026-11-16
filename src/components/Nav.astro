@@ -17,7 +17,7 @@ const rows = [{ label: 'Home', href: u(), id: 'home' }, ...links];
     <a class="logo" href={u()} aria-label="Kitchen 121 home"><img src={logo.src} alt="Kitchen 121" width={logo.width} height={logo.height} /></a>
     <nav class="links" aria-label="Main">
       {links.map((l) => <a href={l.href} aria-current={active === l.id ? 'page' : undefined}>{l.label}</a>)}
-      <a class="order" href={u('locations/')} data-order><span>Order Online</span><span class="arrow">&rarr;</span></a>
+      <a class="order" href={u('locations/')} data-order><span>Order Now</span><span class="arrow">&rarr;</span></a>
     </nav>
     <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
   </div>
@@ -34,7 +34,7 @@ const rows = [{ label: 'Home', href: u(), id: 'home' }, ...links];
       {rows.map((r, i) => <a class="row" href={r.href} aria-current={active === r.id ? 'page' : undefined}><span class="n">{String(i + 1).padStart(2, '0')}</span><span class="t">{r.label}</span><span class="ch" aria-hidden="true">&rsaquo;</span></a>)}
     </nav>
     <div class="foot">
-      {LOCATIONS.map((l) => <a class="m-order" href={l.order} target="_blank" rel="noopener">Order {l.short} &rarr;</a>)}
+      {LOCATIONS.map((l) => <a class="m-order" href={l.order.clover} data-order={l.id}>Order {l.short} &rarr;</a>)}
       <p class="hrs">Tue to Sun 11:30am to 9pm. Monday closed.</p>
     </div>
   </aside>

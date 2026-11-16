@@ -14,14 +14,26 @@ export const INSTAGRAM_HANDLE = '@121onetwentyone';
 export const SISTER = { name: 'Chicken 121', url: 'https://chicken121.com' };
 
 export type LocId = 'duluth' | 'hamilton-mill';
-export interface Loc { id: LocId; name: string; short: string; street: string; city: string; note: string; phone: string; tel: string; order: string; menu: string }
+// Ordering services shown in the "Order Now" pop-up, in the same order as the Chicken 121 site.
+// Links were supplied by the owner; tracking parameters (utm_*, rwg_token) were removed.
+export type ServiceId = 'ubereats' | 'doordash' | 'clover';
+export const SERVICES: { id: ServiceId; name: string }[] = [
+  { id: 'ubereats', name: 'Uber Eats' },
+  { id: 'doordash', name: 'DoorDash' },
+  { id: 'clover', name: 'Clover' },
+];
+export interface Loc { id: LocId; name: string; short: string; street: string; city: string; note: string; phone: string; tel: string; order: Record<ServiceId, string>; menu: string }
 export const LOCATIONS: Loc[] = [
   {
     id: 'duluth', name: 'Kitchen 121 Duluth', short: 'Duluth',
     street: '1611 Satellite Blvd. STE 17', city: 'Duluth, GA 30097',
     note: 'Exit 109. We are located between Starbucks and Five Guys.',
     phone: '770-545-8573', tel: '+17705458573',
-    order: 'https://www.clover.com/online-ordering/kitchen-121-duluth',
+    order: {
+      ubereats: 'https://www.ubereats.com/store/kitchen-121/H6Xk1Ar9XsWfEf_bQmeH0g',
+      doordash: 'https://www.doordash.com/store/kitchen-121-duluth-793002/22824760/',
+      clover: 'https://www.clover.com/online-ordering/kitchen-121-duluth',
+    },
     menu: u('menu/') + '?loc=duluth',
   },
   {
@@ -29,7 +41,11 @@ export const LOCATIONS: Loc[] = [
     street: '2680 Hamilton Mill Rd', city: 'Buford, GA 30519',
     note: 'Next to Whataburger. Previously Wings N Philly Bistro.',
     phone: '770-271-5672', tel: '+17702715672',
-    order: 'https://www.clover.com/online-ordering/kitchen-121-buford-buford',
+    order: {
+      ubereats: 'https://www.ubereats.com/store/kitchen-121-buford/4O62k0EGVAS-HczanfUVww',
+      doordash: 'https://www.doordash.com/store/kitchen-121-hamilton-mill-rd-buford-37875701/96289147/',
+      clover: 'https://www.clover.com/online-ordering/kitchen-121-buford-buford',
+    },
     menu: u('menu/') + '?loc=hamilton-mill',
   },
 ];

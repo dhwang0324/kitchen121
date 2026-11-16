@@ -27,7 +27,7 @@ import { MENUS, RAW_NOTICE } from '../../data/menu';
       {LOCATIONS.map((l) => (
         <div class="info" data-loc-only={l.id}>
           <p><a href={directions(l)} rel="noopener">{address(l)}</a> &middot; <a href={`tel:${l.tel}`}>{l.phone}</a><br />Tuesday to Sunday 11:30am to 9pm, Monday closed</p>
-          <a class="pill pill--sm" href={l.order} target="_blank" rel="noopener"><span>Order {l.short} Online</span><span class="arrow">&rarr;</span></a>
+          <a class="pill pill--sm" href={l.order.clover} data-order={l.id}><span>Order {l.short} Now</span><span class="arrow">&rarr;</span></a>
         </div>
       ))}
     </div>
@@ -50,7 +50,7 @@ import { MENUS, RAW_NOTICE } from '../../data/menu';
           <p class="eyebrow">{l.name}</p>
           <h2 class="h2">Ready to order?</h2>
           <div class="cta">
-            <a class="pill" href={l.order} target="_blank" rel="noopener"><span>Order Online</span><span class="arrow">&rarr;</span></a>
+            <a class="pill" href={l.order.clover} data-order={l.id}><span>Order Now</span><span class="arrow">&rarr;</span></a>
             <a class="pill pill--ghost" href={`tel:${l.tel}`}>Call {l.phone}</a>
           </div>
         </div>

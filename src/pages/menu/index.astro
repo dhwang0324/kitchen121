@@ -1,0 +1,100 @@
+---
+// The menu: one page for both kitchens. A switch picks Duluth or Hamilton Mill (the two menus differ), the choice is
+// remembered on the device and can be linked with ?loc=duluth or ?loc=hamilton-mill. Content comes from src/data/menu.ts.
+// Without JavaScript both menus are shown one after the other.
+import Site from '../../layouts/Site.astro';
+import PageHero from '../../components/PageHero.astro';
+import MenuPanel from '../../components/MenuPanel.astro';
+import { LOCATIONS, address, directions } from '../../data/site';
+import { MENUS, RAW_NOTICE } from '../../data/menu';
+---
+<Site title="Menu | Kitchen 121" description="Kitchen 121 menus for Duluth and Hamilton Mill: signature chicken, sushi rolls, bowls and party platters." active="menu">
+  <PageHero eyebrow="Clean food for your body and soul" title="The Menu" lead="Our two kitchens have slightly different menus. Pick your location to see what it serves." photos={['hot-bulgogi', 'chicken-soy-garlic']} />
+
+  <div class="menu" id="menu">
+    <!-- Runs before the menus are painted, so the right location shows without a flash. -->
+    <script is:inline>
+      (function () { var ok = ['duluth', 'hamilton-mill'], q = new URLSearchParams(location.search).get('loc'), s = null;
+        try { s = localStorage.getItem('k121-loc'); } catch (e) {}
+        document.documentElement.dataset.loc = ok.indexOf(q) > -1 ? q : ok.indexOf(s) > -1 ? s : 'duluth'; })();
+    </script>
+
+    <div class="container pick">
+      <p class="eyebrow">Choose your kitchen</p>
+      <div class="switch" role="group" aria-label="Choose a location">
+        {LOCATIONS.map((l) => <button type="button" data-set-loc={l.id} aria-pressed="false">{l.short}</button>)}
+      </div>
+      {LOCATIONS.map((l) => (
+        <div class="info" data-loc-only={l.id}>
+          <p><a href={directions(l)} rel="noopener">{address(l)}</a> &middot; <a href={`tel:${l.tel}`}>{l.phone}</a><br />Tuesday to Sunday 11:30am to 9pm, Monday closed</p>
+          <a class="pill pill--sm" href={l.order} target="_blank" rel="noopener"><span>Order {l.short} Online</span><span class="arrow">&rarr;</span></a>
+        </div>
+      ))}
+    </div>
+
+    {LOCATIONS.map((l) => (
+      <div class="one" data-loc-only={l.id}>
+        <div class="container sheet">
+          <h2 class="nojs">{l.name}</h2>
+          {MENUS[l.id].map((s) => <MenuPanel section={s} prefix={l.id} />)}
+        </div>
+      </div>
+    ))}
+    <div class="container sheet"><p class="fine"><b>*</b> {RAW_NOTICE}</p></div>
+  </div>
+
+  <section class="order on-dark">
+    <div class="container">
+      {LOCATIONS.map((l) => (
+        <div data-loc-only={l.id}>
+          <p class="eyebrow">{l.name}</p>
+          <h2 class="h2">Ready to order?</h2>
+          <div class="cta">
+            <a class="pill" href={l.order} target="_blank" rel="noopener"><span>Order Online</span><span class="arrow">&rarr;</span></a>
+            <a class="pill pill--ghost" href={`tel:${l.tel}`}>Call {l.phone}</a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</Site>
+
+<style is:global>
+  /* Show only the chosen location's parts. With no choice set (no JavaScript) everything stays visible. */
+  html[data-loc="duluth"] [data-loc-only="hamilton-mill"], html[data-loc="hamilton-mill"] [data-loc-only="duluth"] { display: none !important; }
+  html[data-loc] .nojs { display: none; }
+  html:not([data-loc]) .switch, html:not([data-loc]) .pick .eyebrow { display: none; }
+</style>
+<style>
+  .menu { background: var(--paper); color: var(--ink); padding-bottom: clamp(56px, 8vw, 96px); scroll-margin-top: 4.5rem; }
+  .pick { text-align: center; padding-block: clamp(2rem, 5vw, 3.2rem) 0; }
+  .switch { display: inline-flex; padding: 5px; border-radius: 9999px; background: #fff; box-shadow: 0 6px 24px rgb(0 0 0 / .08), inset 0 0 0 2px var(--ink); }
+  .switch button { border: 0; background: transparent; color: var(--ink); cursor: pointer; padding: .7rem clamp(1.1rem, 4vw, 2.4rem) .6rem; border-radius: 9999px; font-family: var(--display); font-weight: 800; font-size: clamp(1.3rem, 3.4vw, 1.8rem); letter-spacing: .06em; text-transform: uppercase; line-height: 1; transition: background-color .2s, color .2s; }
+  .switch button[aria-pressed="true"] { background: var(--green); color: #fff; }
+  .switch button:not([aria-pressed="true"]):hover { background: rgb(20 20 20 / .07); }
+  .info { margin-top: 1.2rem; }
+  .info p { margin: 0 0 1rem; font-size: .98rem; color: #4d4d4d; }
+  .info p a { color: inherit; font-weight: 600; text-decoration: none; border-bottom: 2px solid rgb(15 102 54 / .35); }
+  .info p a:hover { color: var(--green); border-bottom-color: var(--green); }
+  .sheet { max-width: 64rem; }
+  .nojs { font-size: clamp(2.6rem, 6vw, 4rem); text-align: center; padding-top: 3rem; }
+  .fine { margin: clamp(2rem, 4vw, 3rem) 0 0; font-size: .82rem; line-height: 1.5; color: #6b6b6b; }
+  .fine b { color: var(--green); }
+  .order { text-align: center; background: var(--ink); padding: clamp(56px, 8vw, 104px) 0; }
+  .order h2 { margin-bottom: 1.6rem; }
+  .order .cta { display: flex; flex-wrap: wrap; justify-content: center; gap: .9rem; }
+</style>
+
+<script>
+  const root = document.documentElement;
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-set-loc]'));
+  const sync = () => buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.setLoc === root.dataset.loc)));
+  buttons.forEach((b) => b.addEventListener('click', () => {
+    root.dataset.loc = b.dataset.setLoc!;
+    try { localStorage.setItem('k121-loc', b.dataset.setLoc!); } catch (e) {}
+    history.replaceState(null, '', `?loc=${b.dataset.setLoc}`);
+    sync();
+  }));
+  sync();
+
+</script>

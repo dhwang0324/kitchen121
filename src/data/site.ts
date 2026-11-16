@@ -22,7 +22,7 @@ export const LOCATIONS: Loc[] = [
     note: 'Exit 109. We are located between Starbucks and Five Guys.',
     phone: '770-545-8573', tel: '+17705458573',
     order: 'https://www.clover.com/online-ordering/kitchen-121-duluth',
-    menu: u('menu/duluth/'),
+    menu: u('menu/') + '?loc=duluth',
   },
   {
     id: 'hamilton-mill', name: 'Kitchen 121 Hamilton Mill', short: 'Hamilton Mill',
@@ -30,7 +30,7 @@ export const LOCATIONS: Loc[] = [
     note: 'Next to Whataburger. Previously Wings N Philly Bistro.',
     phone: '770-271-5672', tel: '+17702715672',
     order: 'https://www.clover.com/online-ordering/kitchen-121-buford-buford',
-    menu: u('menu/hamilton-mill/'),
+    menu: u('menu/') + '?loc=hamilton-mill',
   },
 ];
 export const loc = (id: LocId) => LOCATIONS.find((l) => l.id === id)!;

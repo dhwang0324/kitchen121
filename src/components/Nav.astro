@@ -6,8 +6,7 @@ import { u, LOCATIONS } from '../data/site';
 interface Props { active?: string }
 const { active } = Astro.props;
 const links = [
-  { label: 'Duluth Menu', href: u('menu/duluth/'), id: 'duluth' },
-  { label: 'Hamilton Mill Menu', href: u('menu/hamilton-mill/'), id: 'hamilton-mill' },
+  { label: 'Menu', href: u('menu/'), id: 'menu' },
   { label: 'Catering', href: u('catering/'), id: 'catering' },
   { label: 'Locations', href: u('locations/'), id: 'locations' },
 ];
@@ -47,7 +46,7 @@ const rows = [{ label: 'Home', href: u(), id: 'home' }, ...links];
   .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: .9rem; }
   .logo { display: block; line-height: 0; }
   .logo img { height: 3.3rem; width: auto; display: block; }
-  .links { display: none; align-items: center; gap: 1.4rem; }
+  .links { display: none; align-items: center; gap: 1.7rem; }
   .links a { color: rgb(255 255 255 / .85); text-decoration: none; font-family: var(--display); font-size: 1.1rem; font-weight: 600; line-height: 1; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; transition: color .2s; }
   .links a:hover, .links a:focus-visible { color: #fff; }
   .links a[aria-current="page"] { color: #fff; box-shadow: 0 7px 0 -3px var(--leaf); }
@@ -76,7 +75,7 @@ const rows = [{ label: 'Home', href: u(), id: 'home' }, ...links];
   .m-order { display: flex; align-items: center; justify-content: center; padding: .8rem 1rem .7rem; background: var(--green); color: #fff; border-radius: 9999px; text-decoration: none; font-family: var(--display); font-weight: 800; font-size: 1.3rem; letter-spacing: .1em; text-transform: uppercase; line-height: 1; }
   .hrs { margin: .4rem 0 0; font-size: .8rem; color: #bdbdbd; text-align: center; }
   @media (prefers-reduced-motion: reduce) { .drawer, .scrim, .mm { transition: none; } }
-  @media (min-width: 1000px) { .links { display: flex; } .burger { display: none; } .mm { display: none !important; } }
+  @media (min-width: 800px) { .links { display: flex; } .burger { display: none; } .mm { display: none !important; } }
 </style>
 
 <script>
@@ -98,6 +97,6 @@ const rows = [{ label: 'Home', href: u(), id: 'home' }, ...links];
     burger.addEventListener('click', () => set(true));
     menu.addEventListener('click', (e) => { const el = e.target as HTMLElement; if (el.closest('[data-close]') || el.closest('a')) set(false); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu.classList.contains('open')) set(false); });
-    window.matchMedia('(min-width: 1000px)').addEventListener('change', (m) => { if (m.matches && menu.classList.contains('open')) set(false); });
+    window.matchMedia('(min-width: 800px)').addEventListener('change', (m) => { if (m.matches && menu.classList.contains('open')) set(false); });
   }
 </script>

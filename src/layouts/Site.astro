@@ -9,7 +9,7 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import OrderDialog from '../components/OrderDialog.astro';
 import { u } from '../data/site';
-interface Props { title: string; description?: string; active?: 'home' | 'duluth' | 'hamilton-mill' | 'catering' | 'locations' }
+interface Props { title: string; description?: string; active?: 'home' | 'menu' | 'catering' | 'locations' }
 const { title, description = 'Kitchen 121: clean food for your body and soul. Signature chicken, sushi rolls and bowls by Chef Ji Young Lee in Duluth and Hamilton Mill, GA.', active } = Astro.props;
 // The GitHub Pages copy is a private preview: keep it out of search engines. The real domain is indexed.
 const noindex = Astro.site?.hostname.endsWith('github.io') ?? false;

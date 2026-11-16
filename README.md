@@ -11,3 +11,6 @@ Astro static site rebuild for Kitchen 121 (currently live on Namecheap). Content
 1. Back up the current site's `public_html` from cPanel.
 2. Set `SITE` to the real domain and `BASE` to `/` in `astro.config.mjs`.
 3. Swap the Pages workflow for the FTP deploy (same as chicken121: secrets `FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD`).
+
+## Menu
+There is one menu page (`/menu/`) for both kitchens. A switch picks the location; `?loc=duluth` or `?loc=hamilton-mill` links straight to one. Menu content lives in `src/data/menu.ts`.

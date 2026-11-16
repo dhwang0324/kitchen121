@@ -1,4 +1,8 @@
 ---
-import MenuPage from '../../../components/MenuPage.astro';
+// Old address of the hamilton-mill menu: forwards to the single menu page with this location selected.
+import { u } from '../../../data/site';
+const to = u('menu/') + '?loc=hamilton-mill';
 ---
-<MenuPage id="hamilton-mill" />
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8" /><title>Kitchen 121 Menu</title><meta name="robots" content="noindex" /><link rel="canonical" href={to} /><meta http-equiv="refresh" content={`0; url=${to}`} /></head>
+<body><a href={to}>Kitchen 121 menu</a></body></html>

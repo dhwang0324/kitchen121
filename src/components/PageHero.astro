@@ -1,42 +1,43 @@
 ---
-// Header band for the inner pages: charcoal, big condensed title, and two dish photos sitting on the tilted green block from the logo.
-import { food } from '../data/site';
-interface Props { eyebrow?: string; title: string; lead?: string; photos: [string, string]; alts?: [string, string] }
-const { eyebrow, title, lead, photos, alts = ['', ''] } = Astro.props;
-const [a, b] = photos.map((p) => food(p));
+// Header band for the inner pages: a full-width banner photo with a dark shade on the left for the title,
+// same structure as the Chicken 121 site's page headers.
+import { BANNERS, type BannerId } from '../data/banners';
+interface Props { eyebrow?: string; title: string; lead?: string; banner: BannerId; position?: string }
+const { eyebrow, title, lead, banner, position = '70% 50%' } = Astro.props;
+const b = BANNERS[banner];
 ---
 <section class="phero">
-  <div class="container grid">
-    <div class="in rise">
-      {eyebrow && <p class="chip">{eyebrow}</p>}
-      <h1>{title}</h1>
-      {lead && <p class="lead">{lead}</p>}
-      <div class="cta"><slot /></div>
-    </div>
-    <div class="art" aria-hidden={alts[0] ? undefined : 'true'}>
-      <span class="slab"></span>
-      <span class="tile t1"><img src={a.src} alt={alts[0]} width={a.width} height={a.height} fetchpriority="high" /></span>
-      <span class="tile t2"><img src={b.src} alt={alts[1]} width={b.width} height={b.height} /></span>
-    </div>
+  <img class="photo" src={b.src} srcset={b.srcset} sizes="100vw" width={b.width} height={b.height} alt={b.alt} style={`object-position:${position}`} fetchpriority="high" />
+  <div class="shade"></div>
+  <div class="container in rise">
+    {eyebrow && <p class="chip">{eyebrow}</p>}
+    <h1>{title}</h1>
+    {lead && <p class="lead">{lead}</p>}
+    <div class="cta"><slot /></div>
   </div>
 </section>
 
 <style>
-  .phero { position: relative; overflow: hidden; background: var(--ink); padding: 8.5rem 0 clamp(3rem, 6vw, 5rem); }
-  .grid { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(1.5rem, 5vw, 4rem); align-items: center; }
+  .phero { position: relative; display: flex; align-items: flex-end; overflow: hidden; min-height: clamp(420px, 60svh, 600px); background: var(--ink); }
+  .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .shade { position: absolute; inset: 0; pointer-events: none; background:
+    linear-gradient(to bottom, rgb(20 20 20 / .7) 0, rgb(20 20 20 / .15) 120px, transparent 220px),
+    linear-gradient(to right, rgb(20 20 20 / .85) 0, rgb(20 20 20 / .5) 38%, transparent 70%),
+    linear-gradient(to top, rgb(20 20 20 / .6), transparent 45%); }
+  .in { position: relative; z-index: 2; padding-top: 7rem; padding-bottom: clamp(2.2rem, 5vw, 4rem); }
   .chip { margin-bottom: 1rem; }
-  h1 { font-size: clamp(3.6rem, 9vw, 7rem); line-height: .92; letter-spacing: .01em; }
-  .lead { margin: 1rem 0 0; max-width: 34rem; font-size: 1.08rem; line-height: 1.5; color: #e2e2e2; }
+  h1 { font-size: clamp(3.6rem, 9vw, 7rem); line-height: .92; letter-spacing: .01em; text-shadow: 0 4px 24px rgb(0 0 0 / .45); }
+  .lead { margin: 1rem 0 0; max-width: 34rem; font-size: 1.08rem; line-height: 1.5; color: #ececec; }
   .cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; }
   .cta:empty { display: none; }
-  .art { position: relative; aspect-ratio: 5 / 4; }
-  .slab { position: absolute; inset: 6% 2% 2% 12%; background: var(--green); transform: rotate(12deg); }
-  .tile { position: absolute; }
-  .t1 { left: 0; top: 4%; width: 68%; aspect-ratio: 4 / 3; transform: rotate(-5deg); }
-  .t2 { right: 0; bottom: 0; width: 56%; aspect-ratio: 4 / 3; transform: rotate(4deg); border: 5px solid var(--ink); }
-  @media (max-width: 860px) {
-    .phero { padding-top: 7rem; }
-    .grid { grid-template-columns: 1fr; }
-    .art { width: min(78%, 340px); margin: .5rem auto 0; }
+  @media (max-width: 760px) {
+    .shade { background:
+      linear-gradient(to bottom, rgb(20 20 20 / .7) 0, rgb(20 20 20 / .1) 120px, transparent 200px),
+      linear-gradient(to top, rgb(20 20 20 / .92) 0, rgb(20 20 20 / .6) 45%, rgb(20 20 20 / .1) 80%); }
+    .phero { min-height: 520px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .photo { animation: settle 1.8s cubic-bezier(.2, .6, .2, 1) both; }
+    @keyframes settle { from { transform: scale(1.06); } to { transform: none; } }
   }
 </style>

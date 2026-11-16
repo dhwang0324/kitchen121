@@ -5,15 +5,9 @@
 import Site from '../layouts/Site.astro';
 import { u, LOCATIONS, HOURS, TAGLINE, INSTAGRAM, INSTAGRAM_HANDLE, food, directions } from '../data/site';
 import { partyPlatters } from '../data/menu';
+import { BANNERS } from '../data/banners';
+const hero = BANNERS.home;
 
-const mosaic = [
-  { img: 'c-poke', alt: 'Poke bowl with tuna, salmon and avocado' },
-  { img: 'c-roll', alt: 'Sushi roll topped with tuna and eel sauce' },
-  { img: 'c-chicken-boxes', alt: 'Boxes of Kitchen 121 signature chicken in several flavors' },
-  { img: 'c-table', alt: 'A table at Kitchen 121 with a sushi bowl, fried chicken and rolls' },
-  { img: 'c-roll-platter', alt: 'Trays of assorted sushi rolls' },
-  { img: 'c-sashimi', alt: 'Salmon and scallop sashimi' },
-];
 const signature = [
   { img: 'chicken-soy-garlic', name: 'Oriental Soy Garlic Chicken', price: 17, line: '121 Signature Chicken' },
   { img: 'special-yummy', name: '121 Yummy Yummy Roll', price: 16, line: '121 Special Roll' },
@@ -30,10 +24,7 @@ const fromPrice = Math.min(...partyPlatters.items.map((i) => i.p));
 ---
 <Site title="Kitchen 121 | Clean food for your body and soul" active="home">
   <section class="hero" aria-label="Welcome">
-    <div class="mosaic" aria-hidden="true">
-      <div class="col">{mosaic.slice(0, 3).map((m) => <span class="tile"><img src={food(m.img).src} alt="" width={food(m.img).width} height={food(m.img).height} /></span>)}</div>
-      <div class="col col--b">{mosaic.slice(3).map((m) => <span class="tile"><img src={food(m.img).src} alt="" width={food(m.img).width} height={food(m.img).height} /></span>)}</div>
-    </div>
+    <img class="photo" src={hero.src} srcset={hero.srcset} sizes="100vw" width={hero.width} height={hero.height} alt={hero.alt} fetchpriority="high" />
     <div class="shade"></div>
     <div class="container content">
       <div class="copy rise">
@@ -155,13 +146,11 @@ const fromPrice = Math.min(...partyPlatters.items.map((i) => i.p));
 <style>
   /* ---------- hero: copy on the left, a tilted wall of real dishes on the right ---------- */
   .hero { position: relative; display: flex; align-items: center; overflow: hidden; min-height: min(92svh, 860px); background: var(--ink); }
-  .mosaic { position: absolute; top: 50%; right: -6vw; width: min(60vw, 900px); display: grid; grid-template-columns: 1fr 1fr; gap: 16px; transform: translateY(-50%) rotate(var(--tilt)); }
-  .mosaic .col { display: grid; gap: 16px; align-content: center; }
-  .mosaic .col--b { transform: translateY(9%); }
-  .mosaic .tile { aspect-ratio: 4 / 3; border-radius: 26px; }
+  .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 75% 50%; display: block; }
+  @media (prefers-reduced-motion: no-preference) { .photo { animation: settle 1.8s cubic-bezier(.2, .6, .2, 1) both; } @keyframes settle { from { transform: scale(1.06); } to { transform: none; } } }
   .shade { position: absolute; inset: 0; pointer-events: none; background:
     linear-gradient(to bottom, rgb(20 20 20 / .75) 0, rgb(20 20 20 / .2) 120px, transparent 220px),
-    linear-gradient(to right, var(--ink) 0, var(--ink) 30%, rgb(20 20 20 / .55) 50%, rgb(20 20 20 / .05) 78%); }
+    linear-gradient(to right, rgb(20 20 20 / .9) 0, rgb(20 20 20 / .6) 34%, rgb(20 20 20 / .1) 62%, transparent 80%); }
   .content { position: relative; z-index: 2; padding-block: 7rem 4rem; }
   .copy { max-width: 40rem; }
   h1 { margin: 1.1rem 0 1.5rem; font-size: clamp(3.4rem, 7.6vw, 6.8rem); line-height: .9; letter-spacing: .005em; }
@@ -172,12 +161,10 @@ const fromPrice = Math.min(...partyPlatters.items.map((i) => i.p));
   .cta { display: flex; flex-wrap: wrap; gap: .9rem; }
   @media (max-width: 860px) {
     .hero { align-items: flex-end; min-height: 100svh; }
-    .mosaic { top: 4.5rem; right: -22vw; left: -22vw; width: auto; transform: rotate(var(--tilt)); gap: 10px; }
-    .mosaic .col { gap: 10px; }
-    .mosaic .tile { border-radius: 18px; }
+    .photo { object-position: 78% 50%; }
     .shade { background:
       linear-gradient(to bottom, rgb(20 20 20 / .8) 0, rgb(20 20 20 / .15) 110px, transparent 200px),
-      linear-gradient(to top, var(--ink) 0, var(--ink) 34%, rgb(20 20 20 / .7) 52%, transparent 78%); }
+      linear-gradient(to top, rgb(20 20 20 / .95) 0, rgb(20 20 20 / .75) 40%, rgb(20 20 20 / .15) 75%); }
     .content { padding-block: 0 3rem; }
     .copy { margin-inline: auto; text-align: center; }
     h1 .block span { transform-origin: center; }

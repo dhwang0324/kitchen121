@@ -53,7 +53,7 @@ export const loc = (id: LocId) => LOCATIONS.find((l) => l.id === id)!;
 export const address = (l: Loc) => `${l.street}, ${l.city}`;
 export const directions = (l: Loc) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Kitchen 121 ${address(l)}`)}`;
 
-// Dish photos cropped from the client's own menus and home page collage.
+// Dish images: illustrated placeholders (src/assets/food), one per dish, until real photography is supplied.
 const files = import.meta.glob<{ default: ImageMetadata }>('../assets/food/*.webp', { eager: true });
 export const food = (name: string): ImageMetadata => {
   const hit = files[`../assets/food/${name}.webp`];

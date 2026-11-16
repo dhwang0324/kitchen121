@@ -1,0 +1,49 @@
+---
+// "Order Online" asks which kitchen first, because each location has its own Clover ordering page.
+// Any link with data-order opens this picker; without JavaScript the link goes to the Locations page instead.
+import { LOCATIONS } from '../data/site';
+---
+<dialog class="od" id="order-dialog" aria-labelledby="od-title">
+  <button class="x" type="button" aria-label="Close" data-od-close><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" /></svg></button>
+  <p class="eyebrow">Order Online</p>
+  <h2 id="od-title">Pick your kitchen</h2>
+  <div class="opts">
+    {LOCATIONS.map((l, i) => (
+      <a class="opt" href={l.order} target="_blank" rel="noopener">
+        <span class="num">{String(i + 1).padStart(2, '0')}</span>
+        <b>{l.short}</b>
+        <span class="addr">{l.street}<br />{l.city}</span>
+        <span class="go">Order from {l.short} &rarr;</span>
+      </a>
+    ))}
+  </div>
+  <p class="fine">Online ordering opens in a new tab.</p>
+</dialog>
+
+<style>
+  .od { width: min(92vw, 40rem); border: 0; border-radius: 30px; padding: clamp(1.5rem, 4vw, 2.6rem); background: var(--paper); color: var(--ink); box-shadow: 0 30px 80px rgb(0 0 0 / .5); }
+  .od::backdrop { background: rgb(0 0 0 / .65); }
+  .x { position: absolute; top: .9rem; right: .9rem; width: 2.6rem; height: 2.6rem; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; }
+  .x svg { width: 1.4rem; height: 1.4rem; fill: none; stroke: currentColor; stroke-width: 2.8; stroke-linecap: round; }
+  h2 { font-size: clamp(2.4rem, 6vw, 3.6rem); margin-bottom: 1.2rem; }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+  .opt { position: relative; display: grid; gap: .25rem; padding: 1.2rem 1.2rem 1.1rem; border-radius: 22px; background: #fff; color: var(--ink); text-decoration: none; box-shadow: 0 6px 24px rgb(0 0 0 / .07); border: 2px solid transparent; transition: border-color .2s, transform .2s; }
+  .opt:hover { border-color: var(--green); transform: translateY(-2px); }
+  .num { font-weight: 700; font-size: .8rem; color: var(--green); }
+  .opt b { font-family: var(--display); font-weight: 800; font-size: 2.1rem; line-height: 1; text-transform: uppercase; }
+  .addr { font-size: .9rem; line-height: 1.4; color: #555; }
+  .go { margin-top: .5rem; font-family: var(--display); font-weight: 800; font-size: 1.2rem; letter-spacing: .08em; text-transform: uppercase; color: var(--green); }
+  .fine { margin: 1rem 0 0; font-size: .8rem; color: #777; }
+  @media (max-width: 520px) { .opts { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  const dialog = document.getElementById('order-dialog') as HTMLDialogElement | null;
+  if (dialog && typeof dialog.showModal === 'function') {
+    document.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      if (t.closest('[data-order]')) { e.preventDefault(); dialog.showModal(); return; }
+      if (t.closest('[data-od-close]') || t === dialog) dialog.close();
+    });
+  }
+</script>

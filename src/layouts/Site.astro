@@ -1,0 +1,107 @@
+---
+// Shared shell for every page: head, fonts, design tokens, nav, footer and the "Order Online" location picker.
+// Same system as the Chicken 121 site (Barlow Condensed display type, charcoal / paper surfaces, pill buttons),
+// with Kitchen 121's own green, logo and photos. The tilted green block comes from the Kitchen 121 logo.
+import '@fontsource/barlow-condensed/600.css';
+import '@fontsource/barlow-condensed/700.css';
+import '@fontsource/barlow-condensed/800.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import OrderDialog from '../components/OrderDialog.astro';
+import { u } from '../data/site';
+interface Props { title: string; description?: string; active?: 'home' | 'duluth' | 'hamilton-mill' | 'catering' | 'locations' }
+const { title, description = 'Kitchen 121: clean food for your body and soul. Signature chicken, sushi rolls and bowls by Chef Ji Young Lee in Duluth and Hamilton Mill, GA.', active } = Astro.props;
+// The GitHub Pages copy is a private preview: keep it out of search engines. The real domain is indexed.
+const noindex = Astro.site?.hostname.endsWith('github.io') ?? false;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow, noarchive" />}
+    <meta name="theme-color" content="#242424" />
+    <link rel="icon" href={u('favicon.svg')} type="image/svg+xml" />
+    <!-- Motion is switched on only when the visitor has not asked for reduced motion. -->
+    <script is:inline>try { if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('js-anim'); } catch (e) {}</script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Nav active={active} />
+    <main id="main"><slot /></main>
+    <Footer />
+    <OrderDialog />
+    <script>
+      // Scroll reveal: blocks fade up the first time they scroll into view. Nothing is hidden unless JavaScript runs
+      // and motion is allowed, and anything that was never observed is shown after 3 seconds.
+      if (document.documentElement.classList.contains('js-anim') && 'IntersectionObserver' in window) {
+        const els = Array.from(document.querySelectorAll<HTMLElement>('[data-a]'));
+        els.forEach((el) => {
+          const i = Array.from(el.parentElement!.children).indexOf(el);
+          el.style.setProperty('--d', Math.min(i, 5) * 0.07 + 's');
+        });
+        const show = (el: Element) => el.classList.add('a-in');
+        const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { show(e.target); io.unobserve(e.target); } }), { rootMargin: '0px 0px -6% 0px' });
+        els.forEach((el) => io.observe(el));
+        setTimeout(() => els.forEach((el) => { if (el.getBoundingClientRect().top < innerHeight) show(el); }), 3000);
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --green: #0f6636;      /* the green of the "121" block in the logo */
+    --green-2: #15803f;    /* hover */
+    --leaf: #58c98a;       /* green that stays readable on charcoal */
+    --charcoal: #242424; --ink: #141414; --paper: #faf8f4; --gold: #c9a23f;
+    --display: 'Barlow Condensed', Impact, 'Arial Narrow', sans-serif;
+    --text: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --tilt: 4deg;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 9rem; }
+  html, body { margin: 0; }
+  body { background: var(--charcoal); color: #fff; font-family: var(--text); font-weight: 400; line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 800; text-transform: uppercase; line-height: .95; margin: 0; }
+  .container { margin-inline: auto; width: 100%; max-width: 74rem; padding-inline: 1.25rem; }
+  @media (min-width: 640px) { .container { padding-inline: 2rem; } }
+  @media (min-width: 1024px) { .container { padding-inline: 2.5rem; } }
+
+  .skip { position: absolute; left: -999px; top: 0; z-index: 200; background: #fff; color: #141414; padding: .6rem 1rem; }
+  .skip:focus { left: .5rem; top: .5rem; }
+
+  .chip { display: inline-block; margin: 0; padding: .35rem 1rem .25rem; border-radius: 9999px; background: var(--green); color: #fff; font-family: var(--display); font-weight: 700; font-size: 1.1rem; letter-spacing: .12em; text-transform: uppercase; line-height: 1.2; }
+  .eyebrow { margin: 0 0 .3rem; font-family: var(--display); font-weight: 700; font-size: 1.35rem; letter-spacing: .12em; text-transform: uppercase; line-height: 1.1; color: var(--green); }
+  .on-dark .eyebrow, .eyebrow.on-dark { color: var(--leaf); }
+  .h2 { font-size: clamp(2.8rem, 6vw, 5.25rem); }
+
+  .pill { display: inline-flex; align-items: center; justify-content: center; gap: .7rem; padding: .8rem 1.8rem .7rem; border-radius: 9999px; border: 2px solid var(--green); background: var(--green); color: #fff; font-family: var(--display); font-weight: 800; font-size: 1.3rem; letter-spacing: .1em; text-transform: uppercase; line-height: 1; text-decoration: none; cursor: pointer; transition: background-color .3s, border-color .3s, color .3s, transform .3s; }
+  .pill:hover { background: var(--green-2); border-color: var(--green-2); transform: translateY(-2px); }
+  .pill .arrow { transition: transform .5s; } .pill:hover .arrow { transform: translateX(4px); }
+  .pill--ghost { background: transparent; border-color: #fff; }
+  .pill--ghost:hover { background: #fff; border-color: #fff; color: var(--ink); }
+  .pill--ink { background: transparent; border-color: var(--ink); color: var(--ink); }
+  .pill--ink:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .pill--white { background: #fff; border-color: #fff; color: var(--green); }
+  .pill--white:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .pill--sm { font-size: 1.1rem; padding: .6rem 1.2rem .5rem; }
+  :focus-visible { outline: 3px solid var(--leaf); outline-offset: 3px; }
+
+  /* Photo tile: rounded, slightly tilted, like the block in the logo. */
+  .tile { display: block; margin: 0; border-radius: 22px; overflow: hidden; background: #1b1b1b; box-shadow: 0 18px 40px rgb(0 0 0 / .28); }
+  .tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .js-anim [data-a] { opacity: 0; transform: translateY(18px); transition: opacity .8s cubic-bezier(.2, .7, .2, 1) var(--d, 0s), transform .8s cubic-bezier(.2, .7, .2, 1) var(--d, 0s); }
+    .js-anim [data-a].a-in { opacity: 1; transform: none; }
+    @keyframes a-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+    .rise > * { animation: a-rise .8s cubic-bezier(.2, .7, .2, 1) both; }
+    .rise > :nth-child(1) { animation-delay: .1s; } .rise > :nth-child(2) { animation-delay: .2s; }
+    .rise > :nth-child(3) { animation-delay: .3s; } .rise > :nth-child(4) { animation-delay: .45s; } .rise > :nth-child(5) { animation-delay: .55s; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>

@@ -1,0 +1,53 @@
+---
+// Footer: brand, both locations, hours and contact. All details are from the client's current site.
+import logo from '../assets/logo-dark.webp';
+import { u, LOCATIONS, HOURS, EMAIL, INSTAGRAM, INSTAGRAM_HANDLE, TAGLINE, SISTER, directions } from '../data/site';
+---
+<footer class="foot">
+  <div class="in">
+    <div class="brand">
+      <img src={logo.src} alt="Kitchen 121" width={logo.width} height={logo.height} loading="lazy" />
+      <p class="tag">{TAGLINE}</p>
+      <nav class="explore" aria-label="Footer">
+        <a href={u('menu/duluth/')}>Duluth Menu</a><a href={u('menu/hamilton-mill/')}>Hamilton Mill Menu</a><a href={u('catering/')}>Catering</a><a href={u('locations/')}>Locations</a>
+      </nav>
+      <a class="sister" href={SISTER.url} rel="noopener">From the same family: {SISTER.name}&nbsp;&rarr;</a>
+    </div>
+    {LOCATIONS.map((l) => (
+      <div>
+        <h3>{l.short}</h3>
+        <p><a href={directions(l)} rel="noopener">{l.street}<br />{l.city}</a></p>
+        <p><a href={`tel:${l.tel}`}>{l.phone}</a></p>
+        <p><a class="go" href={l.order} target="_blank" rel="noopener">Order online &rarr;</a></p>
+      </div>
+    ))}
+    <div>
+      <h3>Hours</h3>
+      {HOURS.map((h) => <p>{h.days}<br /><b>{h.time}</b></p>)}
+      <p><a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
+      <p><a href={INSTAGRAM} rel="noopener">Instagram {INSTAGRAM_HANDLE}</a></p>
+    </div>
+  </div>
+  <p class="credit">Since 2017, Kitchen 121 Duluth &amp; Hamilton Mill. &copy; {new Date().getFullYear()} Kitchen 121. All rights reserved. Developed and designed by Solace.</p>
+</footer>
+
+<style>
+  .foot { background: #242424; color: #fff; border-top: 4px solid var(--green); padding: clamp(44px, 6vw, 80px) clamp(20px, 5vw, 80px) 24px; }
+  .in { max-width: 74rem; margin: 0 auto; display: grid; grid-template-columns: 1.5fr repeat(3, 1fr); gap: 32px; }
+  .brand img { height: 3.2rem; width: auto; display: block; }
+  .tag { margin: .9rem 0 0; font-family: var(--display); font-weight: 700; font-size: 1.25rem; letter-spacing: .1em; text-transform: uppercase; color: var(--leaf); }
+  h3 { margin: 0 0 .7rem; font-size: 2rem; }
+  p { margin: 0 0 .55rem; font-size: .95rem; line-height: 1.55; color: #d0d0d0; }
+  p b { color: #fff; font-weight: 600; }
+  p a { color: inherit; text-decoration: none; }
+  p a:hover { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+  .go { color: var(--leaf); font-family: var(--display); font-weight: 700; font-size: 1.15rem; letter-spacing: .08em; text-transform: uppercase; }
+  .explore { display: flex; flex-wrap: wrap; gap: .3rem 1.2rem; margin-top: 1rem; max-width: 22rem; }
+  .explore a { color: #fff; text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 1.2rem; letter-spacing: .08em; text-transform: uppercase; }
+  .explore a:hover { color: var(--leaf); }
+  .sister { display: inline-block; margin-top: 1rem; color: #d0d0d0; font-size: .9rem; text-decoration: underline; text-underline-offset: 3px; }
+  .sister:hover { color: #fff; }
+  .credit { max-width: 74rem; margin: 2.2rem auto 0; padding-top: 1.1rem; border-top: 1px solid rgb(255 255 255 / .18); font-size: .75rem; color: #8f8f8f; text-align: center; }
+  @media (max-width: 900px) { .in { grid-template-columns: 1fr 1fr; } .brand { grid-column: 1 / -1; } }
+  @media (max-width: 520px) { .in { grid-template-columns: 1fr; gap: 24px; } }
+</style>

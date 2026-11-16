@@ -1,0 +1,20 @@
+---
+import Site from '../layouts/Site.astro';
+import { u } from '../data/site';
+---
+<Site title="Page not found | Kitchen 121">
+  <section class="nf">
+    <div class="container rise">
+      <p class="chip">404</p>
+      <h1>Nothing on this plate</h1>
+      <p>That page does not exist. Try the menus instead.</p>
+      <div class="cta"><a class="pill" href={u()}><span>Back Home</span><span class="arrow">&rarr;</span></a><a class="pill pill--ghost" href={u('locations/')}>Locations</a></div>
+    </div>
+  </section>
+</Site>
+<style>
+  .nf { background: var(--ink); min-height: 80svh; display: flex; align-items: center; text-align: center; padding: 8rem 0 4rem; }
+  h1 { font-size: clamp(3.4rem, 9vw, 6.5rem); margin: 1rem 0; }
+  p { color: #d6d6d6; }
+  .cta { display: flex; flex-wrap: wrap; justify-content: center; gap: .9rem; margin-top: 1.6rem; }
+</style>

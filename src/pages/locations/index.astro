@@ -1,0 +1,67 @@
+---
+// Locations. Addresses, landmarks, hours, phones and e-mail are from the client's current Locations page.
+import Site from '../../layouts/Site.astro';
+import PageHero from '../../components/PageHero.astro';
+import Map from '../../components/Map.astro';
+import { LOCATIONS, HOURS, EMAIL, address, directions } from '../../data/site';
+---
+<Site title="Locations | Kitchen 121" description="Find Kitchen 121 in Duluth (1611 Satellite Blvd. STE 17) and Hamilton Mill (2680 Hamilton Mill Rd, Buford). Open Tuesday to Sunday 11:30am to 9pm." active="locations">
+  <PageHero eyebrow="Find us" title="Locations" lead="Two kitchens, the same high quality casual dining. Open Tuesday to Sunday 11:30am to 9pm, closed Monday." photos={['c-table', 'c-poke']} alts={['A table at Kitchen 121 with a sushi bowl, fried chicken and rolls', 'Poke bowl with tuna, salmon and avocado']} />
+
+  <section class="visit">
+    <div class="container stack">
+      {LOCATIONS.map((l, i) => (
+        <article class:list={['grid', i % 2 === 1 && 'grid--flip']} id={l.id} data-a>
+          <div class="card">
+            <span class="num">{String(i + 1).padStart(2, '0')}</span>
+            <h2>{l.name}</h2>
+            <dl>
+              <div><dt>Address</dt><dd>{l.street}<br />{l.city}<span class="note">{l.note}</span></dd></div>
+              <div><dt>Hours</dt><dd>{HOURS.map((h) => <span class="hr">{h.days}: {h.time}</span>)}</dd></div>
+              <div><dt>Phone</dt><dd><a href={`tel:${l.tel}`}>{l.phone}</a></dd></div>
+            </dl>
+            <div class="cta">
+              <a class="pill" href={directions(l)} rel="noopener"><span>Get Directions</span><span class="arrow">&rarr;</span></a>
+              <a class="pill pill--ink" href={l.menu}>Menu</a>
+              <a class="pill pill--ink" href={l.order} target="_blank" rel="noopener">Order Online</a>
+            </div>
+          </div>
+          <Map query={`Kitchen 121 ${address(l)}`} title={`Map showing ${l.name}`} />
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="ask on-dark">
+    <div class="container">
+      <p class="eyebrow">Get in touch</p>
+      <h2 class="h2">Any questions or messages?</h2>
+      <p class="sub">Please send an e-mail to {EMAIL} or call {LOCATIONS.map((l) => `${l.phone} (${l.short})`).join(' or ')}.</p>
+      <div class="cta">
+        <a class="pill" href={`mailto:${EMAIL}`}><span>Send an E-mail</span><span class="arrow">&rarr;</span></a>
+        {LOCATIONS.map((l) => <a class="pill pill--ghost" href={`tel:${l.tel}`}>Call {l.short}</a>)}
+      </div>
+    </div>
+  </section>
+</Site>
+
+<style>
+  .visit { background: var(--paper); color: var(--ink); padding: clamp(56px, 8vw, 110px) 0; }
+  .stack { display: grid; gap: clamp(48px, 7vw, 96px); }
+  .grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(24px, 4vw, 64px); align-items: center; scroll-margin-top: 6rem; }
+  .grid--flip .card { order: 2; }
+  .num { display: inline-grid; place-items: center; width: 3.8rem; height: 2.9rem; margin: 0 0 1.2rem .3rem; padding-top: .15rem; background: var(--green); color: #fff; font-family: var(--display); font-weight: 800; font-size: 1.8rem; line-height: 1; transform: rotate(8deg); }
+  h2 { font-size: clamp(2.6rem, 4.6vw, 4.2rem); margin-bottom: 1.3rem; }
+  dl { margin: 0 0 1.7rem; display: grid; gap: 1rem; }
+  dt { font-family: var(--display); font-weight: 700; font-size: 1.1rem; letter-spacing: .12em; text-transform: uppercase; color: var(--green); }
+  dd { margin: .1rem 0 0; font-weight: 600; font-size: 1.05rem; line-height: 1.45; }
+  dd a { color: inherit; text-decoration: none; border-bottom: 2px solid rgb(15 102 54 / .35); }
+  dd a:hover { color: var(--green); border-bottom-color: var(--green); }
+  .note { display: block; margin-top: .2rem; font-weight: 400; font-size: .95rem; color: #666; }
+  .hr { display: block; }
+  .cta { display: flex; flex-wrap: wrap; gap: .7rem; }
+  .ask { background: var(--ink); text-align: center; padding: clamp(56px, 8vw, 104px) 0; }
+  .ask .sub { margin: .9rem auto 1.8rem; max-width: 40rem; color: #d6d6d6; }
+  .ask .cta { justify-content: center; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } .grid--flip .card { order: 0; } }
+</style>

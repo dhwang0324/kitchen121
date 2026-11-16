@@ -1,0 +1,42 @@
+---
+// Header band for the inner pages: charcoal, big condensed title, and two dish photos sitting on the tilted green block from the logo.
+import { food } from '../data/site';
+interface Props { eyebrow?: string; title: string; lead?: string; photos: [string, string]; alts?: [string, string] }
+const { eyebrow, title, lead, photos, alts = ['', ''] } = Astro.props;
+const [a, b] = photos.map((p) => food(p));
+---
+<section class="phero">
+  <div class="container grid">
+    <div class="in rise">
+      {eyebrow && <p class="chip">{eyebrow}</p>}
+      <h1>{title}</h1>
+      {lead && <p class="lead">{lead}</p>}
+      <div class="cta"><slot /></div>
+    </div>
+    <div class="art" aria-hidden={alts[0] ? undefined : 'true'}>
+      <span class="slab"></span>
+      <span class="tile t1"><img src={a.src} alt={alts[0]} width={a.width} height={a.height} fetchpriority="high" /></span>
+      <span class="tile t2"><img src={b.src} alt={alts[1]} width={b.width} height={b.height} /></span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .phero { position: relative; overflow: hidden; background: var(--ink); padding: 8.5rem 0 clamp(3rem, 6vw, 5rem); }
+  .grid { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(1.5rem, 5vw, 4rem); align-items: center; }
+  .chip { margin-bottom: 1rem; }
+  h1 { font-size: clamp(3.6rem, 9vw, 7rem); line-height: .92; letter-spacing: .01em; }
+  .lead { margin: 1rem 0 0; max-width: 34rem; font-size: 1.08rem; line-height: 1.5; color: #e2e2e2; }
+  .cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; }
+  .cta:empty { display: none; }
+  .art { position: relative; aspect-ratio: 5 / 4; }
+  .slab { position: absolute; inset: 6% 2% 2% 12%; background: var(--green); transform: rotate(12deg); }
+  .tile { position: absolute; }
+  .t1 { left: 0; top: 4%; width: 68%; aspect-ratio: 4 / 3; transform: rotate(-5deg); }
+  .t2 { right: 0; bottom: 0; width: 56%; aspect-ratio: 4 / 3; transform: rotate(4deg); border: 5px solid var(--ink); }
+  @media (max-width: 860px) {
+    .phero { padding-top: 7rem; }
+    .grid { grid-template-columns: 1fr; }
+    .art { width: min(78%, 340px); margin: .5rem auto 0; }
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+// Catering 121. Copy is from the client's current Catering page; platters and prices are from the current printed menus
+// (the old catering banner image on their site shows older prices, so it is not used).
+import Site from '../../layouts/Site.astro';
+import PageHero from '../../components/PageHero.astro';
+import { LOCATIONS, EMAIL, address, food } from '../../data/site';
+import { partyPlatters } from '../../data/menu';
+const chicken = partyPlatters.items.filter((i) => /chicken/i.test(i.n));
+const rolls = partyPlatters.items.filter((i) => !/chicken/i.test(i.n));
+---
+<Site title="Catering 121 | Kitchen 121" description="Kitchen 121 catering: boxes, trays and party platters of signature chicken and sushi rolls for family or corporate events in Duluth and Hamilton Mill, GA." active="catering">
+  <PageHero eyebrow="Catering 121" title="Boxes or trays" lead="Kitchen 121 also offers catering services. Whether you prefer boxes or trays, we have the perfectly-portioned catering option for your family or corporate event." photos={['c-roll-platter', 'c-chicken-boxes']} alts={['Trays of assorted sushi rolls', 'Boxes of signature chicken in several flavors']}>
+    <a class="pill" href="#contact"><span>Contact Us for Details</span><span class="arrow">&rarr;</span></a>
+  </PageHero>
+
+  <section class="plat">
+    <div class="container">
+      <div class="head" data-a>
+        <p class="eyebrow">For sharing</p>
+        <h2 class="h2">121 Party Platter</h2>
+      </div>
+      <div class="two">
+        {[{ t: 'Chicken', items: chicken, img: 'hm-all-star', cap: 'Chicken All Star' }, { t: 'Rolls', items: rolls, img: 'c-roll-platter', cap: 'Roll platters' }].map((g) => (
+          <article class="card" data-a>
+            <span class="tile"><img src={food(g.img).src} alt={g.cap} width={food(g.img).width} height={food(g.img).height} loading="lazy" /></span>
+            <h3>{g.t}</h3>
+            <ul>
+              {g.items.map((i) => (
+                <li>
+                  <div class="row"><span class="n">{i.n}{i.raw && <span class="raw">*</span>}</span><span class="dots" aria-hidden="true"></span><b>${i.p}</b></div>
+                  <p class="d"><span class="serves">{i.serves}{i.d && '. '}</span>{i.d}</p>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+      <p class="fine" data-a>* Items marked with an asterisk are served undercooked or may contain raw ingredient. Consuming raw or undercooked meats, seafood, fish or eggs may increase your risk of food-borne illness. All crab used is imitation crab.</p>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="head" data-a>
+        <p class="eyebrow">Catering orders</p>
+        <h2 class="h2">Contact us for details</h2>
+        <p class="sub">Please feel free to contact either kitchen by phone, or send us an e-mail.</p>
+      </div>
+      <div class="two">
+        {LOCATIONS.map((l) => (
+          <article class="loc" data-a>
+            <h3>{l.short} location</h3>
+            <p>{address(l)}</p>
+            <a class="pill pill--white" href={`tel:${l.tel}`}>Call {l.phone}</a>
+          </article>
+        ))}
+      </div>
+      <p class="mail" data-a><a class="pill pill--ghost" href={`mailto:${EMAIL}?subject=Catering%20request`}>E-mail {EMAIL}</a></p>
+    </div>
+  </section>
+</Site>
+
+<style>
+  .head { text-align: center; max-width: 44rem; margin: 0 auto clamp(2rem, 4vw, 3.2rem); }
+  .sub { margin: .7rem auto 0; }
+  .plat { background: var(--paper); color: var(--ink); padding: clamp(56px, 8vw, 110px) 0; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); align-items: start; }
+  .card { background: #fff; border-radius: 30px; padding: clamp(22px, 4vw, 48px); box-shadow: 0 10px 40px rgb(0 0 0 / .06); }
+  .card .tile { aspect-ratio: 16 / 9; margin-bottom: 1.6rem; transform: rotate(-2deg); }
+  .card:nth-child(even) .tile { transform: rotate(2deg); }
+  .card h3 { font-size: clamp(2.2rem, 4vw, 3.2rem); margin-bottom: 1.1rem; }
+  .card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+  .row { display: flex; align-items: baseline; gap: .6rem; }
+  .n { font-weight: 700; } .raw { color: var(--green); }
+  .dots { flex: 1; border-bottom: 2px dotted rgb(0 0 0 / .25); transform: translateY(-4px); min-width: 16px; }
+  .row b { font-family: var(--display); font-weight: 800; font-size: 1.7rem; line-height: 1; color: var(--green); }
+  .d { margin: .15rem 0 0; padding-right: 2.5rem; font-size: .9rem; color: #6b6b6b; }
+  .serves { font-weight: 600; color: #444; }
+  .fine { margin: 1.6rem 0 0; font-size: .82rem; color: #6b6b6b; }
+  .contact { background: var(--green); padding: clamp(56px, 8vw, 110px) 0; }
+  .contact .eyebrow { color: #fff; opacity: .85; }
+  .contact .sub { color: #e9f3ec; }
+  .loc { background: rgb(0 0 0 / .18); border-radius: 30px; padding: clamp(22px, 4vw, 44px); text-align: center; }
+  .loc h3 { font-size: clamp(2rem, 4vw, 3rem); }
+  .loc p { margin: .6rem 0 1.4rem; color: #e9f3ec; }
+  .mail { text-align: center; margin: 2rem 0 0; }
+  .mail .pill { text-transform: none; letter-spacing: .04em; max-width: 100%; }
+  @media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+</style>

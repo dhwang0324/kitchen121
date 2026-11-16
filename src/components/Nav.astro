@@ -1,0 +1,103 @@
+---
+// Header, same structure as the Chicken 121 site: fixed bar, transparent at the top and translucent after 40px of scroll,
+// logo left, links right, hamburger + numbered side drawer on small screens.
+import logo from '../assets/logo-dark.webp';
+import { u, LOCATIONS } from '../data/site';
+interface Props { active?: string }
+const { active } = Astro.props;
+const links = [
+  { label: 'Duluth Menu', href: u('menu/duluth/'), id: 'duluth' },
+  { label: 'Hamilton Mill Menu', href: u('menu/hamilton-mill/'), id: 'hamilton-mill' },
+  { label: 'Catering', href: u('catering/'), id: 'catering' },
+  { label: 'Locations', href: u('locations/'), id: 'locations' },
+];
+const rows = [{ label: 'Home', href: u(), id: 'home' }, ...links];
+---
+<header class="site-header" id="site-header">
+  <div class="container bar">
+    <a class="logo" href={u()} aria-label="Kitchen 121 home"><img src={logo.src} alt="Kitchen 121" width={logo.width} height={logo.height} /></a>
+    <nav class="links" aria-label="Main">
+      {links.map((l) => <a href={l.href} aria-current={active === l.id ? 'page' : undefined}>{l.label}</a>)}
+      <a class="order" href={u('locations/')} data-order><span>Order Online</span><span class="arrow">&rarr;</span></a>
+    </nav>
+    <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="mm" id="mobile-menu" aria-hidden="true">
+  <div class="scrim" data-close></div>
+  <aside class="drawer" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="top">
+      <img class="d-logo" src={logo.src} alt="Kitchen 121" width={logo.width} height={logo.height} />
+      <button class="close" type="button" aria-label="Close menu" data-close><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" /></svg></button>
+    </div>
+    <nav class="rows" aria-label="Main">
+      {rows.map((r, i) => <a class="row" href={r.href} aria-current={active === r.id ? 'page' : undefined}><span class="n">{String(i + 1).padStart(2, '0')}</span><span class="t">{r.label}</span><span class="ch" aria-hidden="true">&rsaquo;</span></a>)}
+    </nav>
+    <div class="foot">
+      {LOCATIONS.map((l) => <a class="m-order" href={l.order} target="_blank" rel="noopener">Order {l.short} &rarr;</a>)}
+      <p class="hrs">Tue to Sun 11:30am to 9pm. Monday closed.</p>
+    </div>
+  </aside>
+</div>
+
+<style>
+  .site-header { position: fixed; inset: 0 0 auto 0; z-index: 50; background: transparent; border-bottom: 1px solid transparent; transition: background-color .5s, border-color .5s, backdrop-filter .5s; }
+  .site-header.scrolled { background: rgb(36 36 36 / .88); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-bottom-color: rgb(255 255 255 / .1); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: .9rem; }
+  .logo { display: block; line-height: 0; }
+  .logo img { height: 3.3rem; width: auto; display: block; }
+  .links { display: none; align-items: center; gap: 1.4rem; }
+  .links a { color: rgb(255 255 255 / .85); text-decoration: none; font-family: var(--display); font-size: 1.1rem; font-weight: 600; line-height: 1; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; transition: color .2s; }
+  .links a:hover, .links a:focus-visible { color: #fff; }
+  .links a[aria-current="page"] { color: #fff; box-shadow: 0 7px 0 -3px var(--leaf); }
+  .links a.order { display: inline-flex; align-items: center; gap: .5rem; font-weight: 700; background: var(--green); color: #fff; border-radius: 9999px; padding: .65rem 1.25rem .55rem; margin-left: .3rem; transition: background-color .3s; }
+  .links a.order:hover { background: var(--green-2); }
+  .links a.order .arrow { transition: transform .5s; } .links a.order:hover .arrow { transform: translateX(4px); }
+  .burger { display: flex; flex-direction: column; gap: .375rem; padding: .5rem .25rem; background: none; border: 0; cursor: pointer; }
+  .burger span { display: block; height: 2px; width: 1.6rem; background: #fff; }
+
+  .mm { position: fixed; inset: 0; z-index: 100; visibility: hidden; transition: visibility 0s .35s; }
+  .mm.open { visibility: visible; transition-delay: 0s; }
+  .scrim { position: absolute; inset: 0; background: rgb(0 0 0 / .62); opacity: 0; transition: opacity .3s; }
+  .mm.open .scrim { opacity: 1; }
+  .drawer { position: absolute; top: 0; right: 0; bottom: 0; width: min(86vw, 21rem); display: flex; flex-direction: column; background: #242424; border-left: 4px solid var(--green); padding: 1.1rem 1.4rem 1.2rem; transform: translateX(104%); transition: transform .35s cubic-bezier(.2,.7,.2,1); overflow-y: auto; }
+  .mm.open .drawer { transform: none; }
+  .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .d-logo { height: 2.5rem; width: auto; display: block; }
+  .close { width: 2.6rem; height: 2.6rem; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #fff; cursor: pointer; }
+  .close svg { width: 1.5rem; height: 1.5rem; fill: none; stroke: currentColor; stroke-width: 2.8; stroke-linecap: round; }
+  .rows { display: grid; }
+  .row { display: flex; align-items: center; gap: .9rem; padding: .75rem .2rem .55rem; border-bottom: 1px solid #3a3a3a; color: #fff; text-decoration: none; font-family: var(--display); font-weight: 800; font-size: 1.8rem; line-height: 1.05; letter-spacing: .04em; text-transform: uppercase; }
+  .row .n { width: 1.6rem; font-family: var(--text); font-weight: 700; font-size: .8rem; color: var(--leaf); }
+  .row .ch { margin-left: auto; color: #777; font-size: 1.7rem; }
+  .row[aria-current="page"], .row:hover { color: var(--leaf); }
+  .foot { margin-top: auto; padding-top: 1.4rem; display: grid; gap: .6rem; }
+  .m-order { display: flex; align-items: center; justify-content: center; padding: .8rem 1rem .7rem; background: var(--green); color: #fff; border-radius: 9999px; text-decoration: none; font-family: var(--display); font-weight: 800; font-size: 1.3rem; letter-spacing: .1em; text-transform: uppercase; line-height: 1; }
+  .hrs { margin: .4rem 0 0; font-size: .8rem; color: #bdbdbd; text-align: center; }
+  @media (prefers-reduced-motion: reduce) { .drawer, .scrim, .mm { transition: none; } }
+  @media (min-width: 1000px) { .links { display: flex; } .burger { display: none; } .mm { display: none !important; } }
+</style>
+
+<script>
+  const header = document.getElementById('site-header');
+  const burger = document.querySelector<HTMLButtonElement>('.burger');
+  const menu = document.getElementById('mobile-menu') as HTMLElement | null;
+  const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 40);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (burger && menu) {
+    const closeBtn = menu.querySelector<HTMLButtonElement>('.close');
+    const set = (open: boolean) => {
+      menu.classList.toggle('open', open);
+      menu.setAttribute('aria-hidden', String(!open));
+      burger.setAttribute('aria-expanded', String(open));
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+      if (open) closeBtn?.focus(); else burger.focus({ preventScroll: true });
+    };
+    burger.addEventListener('click', () => set(true));
+    menu.addEventListener('click', (e) => { const el = e.target as HTMLElement; if (el.closest('[data-close]') || el.closest('a')) set(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu.classList.contains('open')) set(false); });
+    window.matchMedia('(min-width: 1000px)').addEventListener('change', (m) => { if (m.matches && menu.classList.contains('open')) set(false); });
+  }
+</script>

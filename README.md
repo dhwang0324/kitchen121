@@ -1,6 +1,6 @@
 # Kitchen 121
 
-Astro static site rebuild for Kitchen 121 (currently live on Namecheap). All page content is placeholder until the client's real copy is added.
+Astro static site rebuild for Kitchen 121 (currently live on Namecheap). Content (copy, both menus, hours, addresses, photos) is taken from the client's current site and printed menus; see `src/data/`. The design shares its system with the Chicken 121 site.
 
 - `npm install` then `npm run dev` to work locally (http://localhost:4321/kitchen121/); `npm run build` outputs `dist/`.
 - Pushing to `main` publishes a **preview** to GitHub Pages (`.github/workflows/pages.yml`). Nothing touches the live Namecheap site.

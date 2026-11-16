@@ -1,0 +1,82 @@
+---
+// A location's full menu. Both locations share this page; the content comes from src/data/menu.ts.
+import Site from '../layouts/Site.astro';
+import PageHero from './PageHero.astro';
+import MenuPanel from './MenuPanel.astro';
+import { LOCATIONS, loc, address, HOURS, type LocId } from '../data/site';
+import { MENUS, RAW_NOTICE } from '../data/menu';
+interface Props { id: LocId }
+const { id } = Astro.props;
+const here = loc(id);
+const other = LOCATIONS.find((l) => l.id !== id)!;
+const sections = MENUS[id];
+const heroPhotos: Record<LocId, [string, string]> = { duluth: ['hot-bulgogi', 'chicken-soy-garlic'], 'hamilton-mill': ['hm-all-star', 'c-roll'] };
+---
+<Site title={`${here.short} Menu | Kitchen 121`} description={`Menu for ${here.name}: signature chicken, sushi rolls, bowls and party platters. ${address(here)}.`} active={id}>
+  <PageHero eyebrow={here.name} title={`${here.short} Menu`} lead={`${address(here)}. ${HOURS[1].days} ${HOURS[1].time}, ${HOURS[0].days} ${HOURS[0].time.toLowerCase()}.`} photos={heroPhotos[id]}>
+    <a class="pill" href={here.order} target="_blank" rel="noopener"><span>Order Online</span><span class="arrow">&rarr;</span></a>
+    <a class="pill pill--ghost" href={other.menu}>{other.short} Menu</a>
+  </PageHero>
+
+  <nav class="cats" aria-label="Menu categories">
+    <div class="container scroller">
+      {sections.map((s) => <a href={`#${s.id}`}>{s.title.replace(/^121 /, '')}</a>)}
+    </div>
+  </nav>
+
+  <div class="menu">
+    <div class="container stack">
+      <p class="legend">
+        <span><b class="raw">*</b> Served undercooked or may contain raw ingredient</span>
+        <span><b class="sp">Spicy</b> Spicy dish</span>
+      </p>
+      {sections.map((s) => <MenuPanel section={s} />)}
+      <p class="fine">{RAW_NOTICE}</p>
+    </div>
+  </div>
+
+  <section class="order on-dark">
+    <div class="container">
+      <p class="eyebrow">{here.name}</p>
+      <h2 class="h2">Ready to order?</h2>
+      <div class="cta">
+        <a class="pill" href={here.order} target="_blank" rel="noopener"><span>Order Online</span><span class="arrow">&rarr;</span></a>
+        <a class="pill pill--ghost" href={`tel:${here.tel}`}>Call {here.phone}</a>
+      </div>
+    </div>
+  </section>
+</Site>
+
+<style>
+  .cats { position: sticky; top: 4.6rem; z-index: 40; background: var(--paper); border-bottom: 1px solid rgb(0 0 0 / .1); }
+  .scroller { display: flex; gap: .5rem; overflow-x: auto; padding-block: .7rem; scrollbar-width: none; }
+  .scroller::-webkit-scrollbar { display: none; }
+  .cats a { flex: none; padding: .45rem 1.1rem .35rem; border-radius: 9999px; border: 2px solid var(--ink); color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 800; font-size: 1.1rem; letter-spacing: .08em; text-transform: uppercase; line-height: 1.1; transition: background-color .2s, color .2s, border-color .2s; }
+  .cats a:hover, .cats a.on { background: var(--green); border-color: var(--green); color: #fff; }
+  .menu { background: var(--paper); color: var(--ink); padding: clamp(28px, 4vw, 48px) 0 clamp(56px, 8vw, 96px); }
+  .stack { display: grid; gap: clamp(20px, 3vw, 36px); }
+  .legend { margin: 0; display: flex; flex-wrap: wrap; gap: .4rem 1.6rem; font-size: .88rem; color: #5f5f5f; }
+  .legend span { display: inline-flex; align-items: center; gap: .35rem; }
+  .legend .raw { color: var(--green); font-size: 1.1rem; }
+  .legend .sp { padding: .12rem .4rem .08rem; border-radius: 4px; background: #c8281e; color: #fff; font-size: .62rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; line-height: 1.2; }
+  .fine { margin: 0; font-size: .82rem; line-height: 1.5; color: #6b6b6b; }
+  .order { text-align: center; background: var(--ink); padding: clamp(56px, 8vw, 104px) 0; }
+  .order h2 { margin-bottom: 1.6rem; }
+  .order .cta { display: flex; flex-wrap: wrap; justify-content: center; gap: .9rem; }
+</style>
+
+<script>
+  // Highlight the category chip for the section being read.
+  const chips = Array.from(document.querySelectorAll<HTMLAnchorElement>('.cats a'));
+  const byId = new Map(chips.map((c) => [c.hash.slice(1), c]));
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      chips.forEach((c) => c.classList.remove('on'));
+      const chip = byId.get(e.target.id);
+      chip?.classList.add('on');
+      chip?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+    }), { rootMargin: '-35% 0px -60% 0px' });
+    document.querySelectorAll('.panel[id]').forEach((p) => io.observe(p));
+  }
+</script>

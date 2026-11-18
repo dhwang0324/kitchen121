@@ -60,6 +60,7 @@ const noindex = Astro.site?.hostname.endsWith('github.io') ?? false;
     --green-2: #15803f;    /* hover */
     --leaf: #58c98a;       /* green that stays readable on charcoal */
     --charcoal: #242424; --ink: #141414; --paper: #faf8f4; --gold: #c9a23f;
+    --cream: #f6f1e8; --rule: #d8cfbe; --body-ink: #2a2622; --muted: #5d564c;
     --display: 'Barlow Condensed', Impact, 'Arial Narrow', sans-serif;
     --text: 'Barlow', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     --tilt: 4deg;
@@ -81,6 +82,13 @@ const noindex = Astro.site?.hostname.endsWith('github.io') ?? false;
   .eyebrow { margin: 0 0 .3rem; font-family: var(--display); font-weight: 700; font-size: 1.35rem; letter-spacing: .12em; text-transform: uppercase; line-height: 1.1; color: var(--green); }
   .on-dark .eyebrow, .eyebrow.on-dark { color: var(--leaf); }
   .h2 { font-size: clamp(2.8rem, 6vw, 5.25rem); }
+  /* Shared with the home page design: cream paper, thin rules, small green labels, underlined text links. */
+  .cream { background: var(--cream); color: var(--body-ink); }
+  .k-label { margin: 0 0 .6rem; font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: .2em; text-transform: uppercase; color: var(--green); }
+  .k-sh { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem 1.5rem; flex-wrap: wrap; padding-bottom: 1.1rem; margin-bottom: clamp(1.4rem, 3vw, 2.2rem); border-bottom: 1px solid var(--rule); }
+  .k-sh h2 { font-size: clamp(2.4rem, 4.6vw, 3.6rem); line-height: .95; }
+  .k-tl { color: inherit; font-weight: 600; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; text-decoration-color: var(--green); white-space: nowrap; }
+  .k-tl:hover { color: var(--green); }
 
   .pill { display: inline-flex; align-items: center; justify-content: center; gap: .7rem; padding: .8rem 1.8rem .7rem; border-radius: 9999px; border: 2px solid var(--green); background: var(--green); color: #fff; font-family: var(--display); font-weight: 800; font-size: 1.3rem; letter-spacing: .1em; text-transform: uppercase; line-height: 1; text-decoration: none; cursor: pointer; transition: background-color .3s, border-color .3s, color .3s, transform .3s; }
   .pill:hover { background: var(--green-2); border-color: var(--green-2); transform: translateY(-2px); }

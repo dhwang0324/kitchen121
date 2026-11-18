@@ -40,7 +40,7 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
 ---
 <Site title="Kitchen 121 | Fresh begins here" active="home">
   <section class="hero" aria-label="Welcome">
-    <img class="photo" src={hero.src} srcset={hero.srcset} sizes="100vw" width={hero.width} height={hero.height} alt={hero.alt} fetchpriority="high" />
+    <img class="photo" id="hero-photo" src={hero.src} srcset={hero.srcset} sizes="100vw" width={hero.width} height={hero.height} alt={hero.alt} fetchpriority="high" />
     <div class="shade"></div>
     <div class="container content">
       <div class="copy rise">
@@ -56,25 +56,25 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
   </section>
 
   <section class="statement">
-    <div class="container"><p>Chef-crafted Korean fried chicken, sushi and bowls. <span>Since 2017.</span></p></div>
+    <div class="container"><p data-a>Chef-crafted Korean fried chicken, sushi and bowls. <span>Since 2017.</span></p></div>
   </section>
 
   <section class="dishes">
     <div class="container">
-      <header class="sh"><h2>Signature dishes</h2><a class="tl" href={u('menu/')}>Full menu &rarr;</a></header>
+      <header class="sh" data-a><h2>Signature dishes</h2><a class="tl" href={u('menu/')}>Full menu &rarr;</a></header>
       <div class="f2">
-        <a class="big" href={u('menu/')}><img {...Img(dishes[0].img)} alt={dishes[0].name} loading="lazy" /><div class="cap"><span class="from">From ${dishes[0].price}</span><h3>{dishes[0].name}</h3><p>{dishes[0].note}</p></div></a>
-        {dishes.slice(1).map((d) => (<a class="sm" href={u('menu/')}><img {...Img(d.img)} alt={d.name} loading="lazy" /><div class="cap"><h3>{d.name}</h3><span>from ${d.price}</span></div></a>))}
+        <a class="big" data-a data-zoom href={u('menu/')}><img {...Img(dishes[0].img)} alt={dishes[0].name} loading="lazy" /><div class="cap"><span class="from">From ${dishes[0].price}</span><h3>{dishes[0].name}</h3><p>{dishes[0].note}</p></div></a>
+        {dishes.slice(1).map((d) => (<a class="sm" data-a data-zoom href={u('menu/')}><img {...Img(d.img)} alt={d.name} loading="lazy" /><div class="cap"><h3>{d.name}</h3><span>from ${d.price}</span></div></a>))}
       </div>
     </div>
     <div class="rail" aria-label="Signature dishes">
-      {five.map((d) => (<a class="card" href={u('menu/')}><img {...Img(d.img)} alt={d.name} loading="lazy" /><div class="ov"><span>{d.note}</span><h3>{d.name}</h3><b>${d.price}</b></div></a>))}
+      {five.map((d) => (<a class="card" data-a href={u('menu/')}><img {...Img(d.img)} alt={d.name} loading="lazy" /><div class="ov"><span>{d.note}</span><h3>{d.name}</h3><b>${d.price}</b></div></a>))}
     </div>
   </section>
 
   <section class="chef">
     <div class="container grid">
-      <div class="txt">
+      <div class="txt" data-a>
         <p class="label">Chef-crafted kitchen</p>
         <h2>Chef-crafted, since 2017</h2>
         <p class="body">Every plate at Kitchen 121 is made by hand by Chef Ji Young Lee and the kitchen team, from the hand-made sauces on our chicken to the rolls made to order. Le Cordon Bleu trained, and formerly of The Ritz-Carlton, Atlanta.</p>
@@ -84,12 +84,12 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
           <li><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 29s-9-8-9-15a9 9 0 0 1 18 0c0 7-9 15-9 15z"/><circle cx="16" cy="14" r="3.2"/></svg><b>Two kitchens</b></li>
         </ul>
       </div>
-      <figure class="ph"><img {...Img(soy)} alt="Soy garlic fried chicken topped with crispy noodles and scallion" loading="lazy" /></figure>
+      <figure class="ph" data-a data-zoom><img {...Img(soy)} alt="Soy garlic fried chicken topped with crispy noodles and scallion" loading="lazy" /></figure>
     </div>
   </section>
 
   <section class="reviews" aria-label="Guest reviews">
-    <div class="container"><header class="sh"><h2>What our guests say</h2><span class="hint"><span class="stars" aria-hidden="true">★★★★★</span> Google reviews</span></header></div>
+    <div class="container"><header class="sh" data-a><h2>What our guests say</h2><span class="hint"><span class="stars" aria-hidden="true">★★★★★</span> Google reviews</span></header></div>
     <div class="strip">
       <ul class="track">
         {[0, 1].map((copy) => REVIEWS.map((r) => (
@@ -105,12 +105,12 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
 
   <section class="visit" id="kitchens">
     <div class="container">
-      <header class="sh"><h2>Visit us</h2><span class="hrs">{HOURS[1].days} {HOURS[1].time} &middot; {HOURS[0].days} {HOURS[0].time.toLowerCase()}</span></header>
+      <header class="sh" data-a><h2>Visit us</h2><span class="hrs">{HOURS[1].days} {HOURS[1].time} &middot; {HOURS[0].days} {HOURS[0].time.toLowerCase()}</span></header>
       <div class="ml">
-        <div class="map"><iframe id="visit-map" src={`https://www.google.com/maps?q=${encodeURIComponent(`Kitchen 121 ${address(LOCATIONS[0])}`)}&output=embed`} title={`Map showing ${LOCATIONS[0].name}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
+        <div class="map" data-a><iframe id="visit-map" src={`https://www.google.com/maps?q=${encodeURIComponent(`Kitchen 121 ${address(LOCATIONS[0])}`)}&output=embed`} title={`Map showing ${LOCATIONS[0].name}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
         <div class="list">
           {LOCATIONS.map((l, i) => (
-            <article class:list={[i === 0 && 'on']} data-map={`https://www.google.com/maps?q=${encodeURIComponent(`Kitchen 121 ${address(l)}`)}&output=embed`} data-title={`Map showing ${l.name}`}>
+            <article data-a class:list={[i === 0 && 'on']} data-map={`https://www.google.com/maps?q=${encodeURIComponent(`Kitchen 121 ${address(l)}`)}&output=embed`} data-title={`Map showing ${l.name}`}>
               <button class="num" type="button" aria-label={`Show ${l.short} on the map`}>{i + 1}</button>
               <div>
                 <h3><button type="button" class="nm">{l.short}</button></h3>
@@ -137,10 +137,25 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
 
   <section class="insta">
     <div class="container">
-      <header class="sh"><h2>Follow along</h2><div class="soc"><span class="handle">{INSTAGRAM_HANDLE}</span>{SOCIALS.map((x) => <a href={x.url} rel="noopener" aria-label={`Kitchen 121 on ${x.name}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICON[x.id]} /></svg></a>)}</div></header>
-      <div class="ig">{insta.map((i) => <a href={INSTAGRAM} rel="noopener" aria-label={`See more photos from Kitchen 121 (${INSTAGRAM_HANDLE})`}><img {...Img(i)} alt="" loading="lazy" /></a>)}</div>
+      <header class="sh" data-a><h2>Follow along</h2><div class="soc"><span class="handle">{INSTAGRAM_HANDLE}</span>{SOCIALS.map((x) => <a href={x.url} rel="noopener" aria-label={`Kitchen 121 on ${x.name}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICON[x.id]} /></svg></a>)}</div></header>
+      <div class="ig">{insta.map((i) => <a data-a href={INSTAGRAM} rel="noopener" aria-label={`See more photos from Kitchen 121 (${INSTAGRAM_HANDLE})`}><img {...Img(i)} alt="" loading="lazy" /></a>)}</div>
     </div>
   </section>
+  <script>
+    // Hero: the photo drifts a little slower than the page and the text fades as you scroll away (skipped with reduced motion).
+    const photo = document.getElementById('hero-photo');
+    const copy = document.querySelector<HTMLElement>('.hero .copy');
+    if (photo && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let ticking = false;
+      const update = () => {
+        const y = Math.min(window.scrollY, innerHeight);
+        photo.style.transform = `translateY(${y * 0.18}px) scale(1.04)`;
+        if (copy) copy.style.opacity = String(Math.max(0, 1 - y / (innerHeight * 0.7)));
+        ticking = false;
+      };
+      addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    }
+  </script>
 </Site>
 
 <style>
@@ -148,7 +163,18 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
      Desktop: small type tucked in the bottom-left corner, light shade, text links.
      Phones: an even, soft dim with everything centered and two small square buttons. ---------- */
   .hero { position: relative; display: flex; overflow: hidden; min-height: min(84svh, 820px); background: #1b1a18; color: #fff; }
-  .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 52%; display: block; }
+  .photo { position: absolute; inset: -4% 0 0 0; width: 100%; height: 104%; object-fit: cover; object-position: 70% 52%; display: block; transform: scale(1.04); }
+  @media (prefers-reduced-motion: no-preference) {
+    /* Hero entrance: the photo settles in, then the lettering is revealed left to right like it is being written. */
+    .photo { animation: hero-settle 2.4s cubic-bezier(.2, .6, .2, 1) both; will-change: transform; }
+    @keyframes hero-settle { from { transform: scale(1.12); opacity: .4; } to { transform: scale(1.04); opacity: 1; } }
+    .hero h1.script { animation: hero-write 1.6s cubic-bezier(.65, 0, .35, 1) .35s both; }
+    @keyframes hero-write { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+    /* Photos that scroll into view ease from a slight zoom. */
+    .js-anim [data-zoom] img { transform: scale(1.08); transition: transform 1.6s cubic-bezier(.2, .7, .2, 1); }
+    .js-anim [data-zoom].a-in img { transform: none; }
+    .js-anim .f2 a.a-in:hover img { transform: scale(1.04); }
+  }
   .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to top right, rgb(18 17 15 / .7) 0, rgb(18 17 15 / .25) 40%, transparent 65%); }
   .content { position: relative; z-index: 2; display: flex; width: 100%; align-items: flex-end; padding-bottom: clamp(2.4rem, 5vw, 4rem); }
   .copy { display: grid; gap: 1rem; max-width: 26rem; }

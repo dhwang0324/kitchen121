@@ -195,9 +195,8 @@ const hamiltonMill: Section[] = [
   {
     id: 'signature-chicken', title: '121 Signature Chicken',
     note: 'House craft 1.5 lb chicken breast + hand made sauce.',
-    photos: [{ img: 'hm-all-star', cap: 'Chicken All Star (6 flavors)' }, chickenPhotos[0], chickenPhotos[1]],
+    photos: chickenPhotos,
     items: [
-      { n: 'Chicken All Star (6 Flavors)', p: 43, serves: 'Serves 2 to 3' },
       { n: 'Crunch Fried Chicken', p: 17 },
       { n: 'Half & Half Chicken', p: 19 },
       { n: 'Sweet Onion Chicken', p: 17 },

@@ -146,8 +146,8 @@ const fromPrice = Math.min(...partyPlatters.items.map((i) => i.p));
 
 <style>
   /* ---------- hero: copy on the left, a tilted wall of real dishes on the right ---------- */
-  .hero { position: relative; display: flex; align-items: center; overflow: hidden; min-height: clamp(560px, 44vw, 820px); background: var(--ink); }
-  .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 55%; display: block; }
+  .hero { position: relative; display: flex; align-items: center; overflow: hidden; min-height: min(92svh, 860px); background: var(--ink); }
+  .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 75% 50%; display: block; }
   @media (prefers-reduced-motion: no-preference) { .photo { animation: settle 1.8s cubic-bezier(.2, .6, .2, 1) both; } @keyframes settle { from { transform: scale(1.06); } to { transform: none; } } }
   .shade { position: absolute; inset: 0; pointer-events: none; background:
     linear-gradient(to bottom, rgb(20 20 20 / .75) 0, rgb(20 20 20 / .2) 120px, transparent 220px),

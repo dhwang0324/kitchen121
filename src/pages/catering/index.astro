@@ -1,33 +1,35 @@
 ---
-// Catering 121. Copy is from the client's current Catering page; platters and prices are from the current printed menus
-// (the old catering banner image on their site shows older prices, so it is not used).
+// Catering 121. Copy is from the client's current Catering page; platters and prices are from the current printed menus.
+// Same design as the home page: cream paper, thin rules, the restaurant's own photos.
 import Site from '../../layouts/Site.astro';
 import PageHero from '../../components/PageHero.astro';
-import { LOCATIONS, EMAIL, address, food } from '../../data/site';
-import { partyPlatters } from '../../data/menu';
-const chicken = partyPlatters.items.filter((i) => /chicken/i.test(i.n));
-const rolls = partyPlatters.items.filter((i) => !/chicken/i.test(i.n));
+import { LOCATIONS, EMAIL, address } from '../../data/site';
+import { partyPlatters, RAW_NOTICE } from '../../data/menu';
+import red from '../../assets/home/red-pepper.webp';
+import roll from '../../assets/home/roll.webp';
+const groups = [
+  { t: 'Chicken platters', img: red, alt: 'Red pepper fried chicken', items: partyPlatters.items.filter((i) => /chicken/i.test(i.n)) },
+  { t: 'Roll platters', img: roll, alt: 'A crunch sushi roll with orange roe', items: partyPlatters.items.filter((i) => !/chicken/i.test(i.n)) },
+];
 ---
 <Site title="Catering 121 | Kitchen 121" description="Kitchen 121 catering: boxes, trays and party platters of signature chicken and sushi rolls for family or corporate events in Duluth and Hamilton Mill, GA." active="catering">
-  <PageHero eyebrow="Catering 121" title="Boxes or trays" lead="Kitchen 121 also offers catering services. Whether you prefer boxes or trays, we have the perfectly-portioned catering option for your family or corporate event." banner="catering" position="66% 50%">
+  <PageHero eyebrow="Catering 121" title="Boxes or trays" lead="Kitchen 121 also offers catering services. Whether you prefer boxes or trays, we have the perfectly-portioned catering option for your family or corporate event." banner="catering" position="55% 50%">
     <a class="pill" href="#contact"><span>Contact Us for Details</span><span class="arrow">&rarr;</span></a>
   </PageHero>
 
-  <section class="plat">
+  <section class="cream plat">
     <div class="container">
-      <div class="head" data-a>
-        <p class="eyebrow">For sharing</p>
-        <h2 class="h2">121 Party Platter</h2>
-      </div>
+      <div class="statement"><p>Perfectly-portioned chicken and roll platters for family and corporate events, <span>serving 2 to 5 each.</span></p></div>
+      <header class="k-sh"><h2>121 Party Platter</h2><a class="k-tl" href="#contact">Order catering &rarr;</a></header>
       <div class="two">
-        {[{ t: 'Chicken', items: chicken, img: 'hm-all-star', cap: 'Chicken All Star' }, { t: 'Rolls', items: rolls, img: 'c-roll-platter', cap: 'Roll platters' }].map((g) => (
-          <article class="card" data-a>
-            <span class="tile"><img src={food(g.img).src} alt={g.cap} width={food(g.img).width} height={food(g.img).height} loading="lazy" /></span>
+        {groups.map((g) => (
+          <article>
+            <figure><img src={g.img.src} width={g.img.width} height={g.img.height} alt={g.alt} loading="lazy" /></figure>
             <h3>{g.t}</h3>
             <ul>
               {g.items.map((i) => (
                 <li>
-                  <div class="row"><span class="n">{i.n}{i.raw && <span class="raw">*</span>}</span><span class="dots" aria-hidden="true"></span><b>${i.p}</b></div>
+                  <div class="row"><span class="n">{i.n}{i.raw && <span class="raw">*</span>}</span><b>${i.p}</b></div>
                   <p class="d"><span class="serves">{i.serves}{i.d && '. '}</span>{i.d}</p>
                 </li>
               ))}
@@ -35,55 +37,46 @@ const rolls = partyPlatters.items.filter((i) => !/chicken/i.test(i.n));
           </article>
         ))}
       </div>
-      <p class="fine" data-a>* Items marked with an asterisk are served undercooked or may contain raw ingredient. Consuming raw or undercooked meats, seafood, fish or eggs may increase your risk of food-borne illness. All crab used is imitation crab.</p>
+      <p class="fine"><b>*</b> {RAW_NOTICE}</p>
     </div>
   </section>
 
-  <section class="contact" id="contact">
+  <section class="cream contact" id="contact">
     <div class="container">
-      <div class="head" data-a>
-        <p class="eyebrow">Catering orders</p>
-        <h2 class="h2">Contact us for details</h2>
-        <p class="sub">Please feel free to contact either kitchen by phone, or send us an e-mail.</p>
-      </div>
-      <div class="two">
+      <header class="k-sh"><h2>Contact us for details</h2><a class="k-tl" href={`mailto:${EMAIL}?subject=Catering%20request`}>{EMAIL}</a></header>
+      <div class="two locs">
         {LOCATIONS.map((l) => (
-          <article class="loc" data-a>
-            <h3>{l.short} location</h3>
-            <p>{address(l)}</p>
-            <a class="pill pill--white" href={`tel:${l.tel}`}>Call {l.phone}</a>
+          <article>
+            <p class="k-label">{l.short}</p>
+            <p class="addr">{address(l)}</p>
+            <a class="pill pill--sm" href={`tel:${l.tel}`}>Call {l.phone}</a>
           </article>
         ))}
       </div>
-      <p class="mail" data-a><a class="pill pill--ghost" href={`mailto:${EMAIL}?subject=Catering%20request`}>E-mail {EMAIL}</a></p>
     </div>
   </section>
 </Site>
 
 <style>
-  .head { text-align: center; max-width: 44rem; margin: 0 auto clamp(2rem, 4vw, 3.2rem); }
-  .sub { margin: .7rem auto 0; }
-  .plat { background: var(--paper); color: var(--ink); padding: clamp(56px, 8vw, 110px) 0; }
-  .two { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); align-items: start; }
-  .card { background: #fff; border-radius: 30px; padding: clamp(22px, 4vw, 48px); box-shadow: 0 10px 40px rgb(0 0 0 / .06); }
-  .card .tile { aspect-ratio: 16 / 9; margin-bottom: 1.6rem; transform: rotate(-2deg); }
-  .card:nth-child(even) .tile { transform: rotate(2deg); }
-  .card h3 { font-size: clamp(2.2rem, 4vw, 3.2rem); margin-bottom: 1.1rem; }
-  .card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
-  .row { display: flex; align-items: baseline; gap: .6rem; }
-  .n { font-weight: 700; } .raw { color: var(--green); }
-  .dots { flex: 1; border-bottom: 2px dotted rgb(0 0 0 / .25); transform: translateY(-4px); min-width: 16px; }
-  .row b { font-family: var(--display); font-weight: 800; font-size: 1.7rem; line-height: 1; color: var(--green); }
-  .d { margin: .15rem 0 0; padding-right: 2.5rem; font-size: .9rem; color: #6b6b6b; }
+  .plat { padding: 0 0 clamp(56px, 8vw, 96px); }
+  .statement { padding: clamp(36px, 6vw, 64px) 0; text-align: center; }
+  .statement p { margin: 0 auto; max-width: 40rem; font-size: clamp(1.1rem, 2vw, 1.35rem); line-height: 1.5; color: var(--muted); }
+  .statement span { color: var(--green); font-weight: 600; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 56px); align-items: start; }
+  figure { margin: 0 0 1.2rem; border-radius: 4px; overflow: hidden; }
+  figure img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+  h3 { font-size: clamp(1.8rem, 3vw, 2.4rem); padding-bottom: .7rem; border-bottom: 1px solid var(--rule); }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { padding: .85rem 0; border-bottom: 1px solid var(--rule); }
+  .row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+  .n { font-weight: 600; font-size: 1.05rem; } .raw { color: var(--green); }
+  .row b { font-family: var(--display); font-weight: 800; font-size: 1.5rem; line-height: 1; color: var(--green); }
+  .d { margin: .2rem 0 0; padding-right: 3rem; font-size: .9rem; line-height: 1.45; color: var(--muted); }
   .serves { font-weight: 600; color: #444; }
-  .fine { margin: 1.6rem 0 0; font-size: .82rem; color: #6b6b6b; }
-  .contact { background: var(--green); padding: clamp(56px, 8vw, 110px) 0; }
-  .contact .eyebrow { color: #fff; opacity: .85; }
-  .contact .sub { color: #e9f3ec; }
-  .loc { background: rgb(0 0 0 / .18); border-radius: 30px; padding: clamp(22px, 4vw, 44px); text-align: center; }
-  .loc h3 { font-size: clamp(2rem, 4vw, 3rem); }
-  .loc p { margin: .6rem 0 1.4rem; color: #e9f3ec; }
-  .mail { text-align: center; margin: 2rem 0 0; }
-  .mail .pill { text-transform: none; letter-spacing: .04em; max-width: 100%; }
-  @media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+  .fine { margin: 1.8rem 0 0; font-size: .82rem; line-height: 1.5; color: var(--muted); }
+  .fine b { color: var(--green); }
+  .contact { padding: 0 0 clamp(56px, 8vw, 96px); }
+  .locs article { padding: 0 0 .4rem; }
+  .addr { margin: 0 0 1rem; font-size: 1.1rem; font-weight: 500; }
+  @media (max-width: 860px) { .two { grid-template-columns: 1fr; } .d { padding-right: 1rem; } }
 </style>

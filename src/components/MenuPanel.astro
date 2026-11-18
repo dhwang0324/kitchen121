@@ -1,11 +1,24 @@
 ---
-// One menu category, laid out like the printed menu: tilted green heading, a strip of that category's photos,
-// then the items in two columns (one on phones) as plain rows with the price on the right.
-import { food } from '../data/site';
+// One menu category, laid out like the printed menu: heading with a thin rule, the restaurant's own photos where we
+// have one for the category, then the items in two columns (one on phones) with the price on the right.
 import type { Section } from '../data/menu';
+import red from '../assets/home/red-pepper.webp';
+import soy from '../assets/home/soy-garlic.webp';
+import roll from '../assets/home/roll.webp';
+import bowl from '../assets/home/bulgogi-bowl.webp';
+import salad from '../assets/home/salad.webp';
+import table from '../assets/home/table.webp';
 interface Props { section: Section; prefix: string }
 const { section: s, prefix } = Astro.props;
-const photos = (s.photos ?? []).slice(0, 3);
+const REAL: Record<string, { img: ImageMetadata; cap: string }[]> = {
+  'signature-chicken': [{ img: red, cap: 'Red Pepper Chicken' }, { img: soy, cap: 'Oriental Soy Garlic Chicken' }],
+  'roll': [{ img: roll, cap: '121 roll with orange roe' }],
+  'hot-bowl': [{ img: bowl, cap: 'Bulgogi bowl' }],
+  'salad-bowl': [{ img: salad, cap: 'Crunch chicken salad' }],
+  'cool-salad': [{ img: salad, cap: 'Crunch chicken salad' }],
+  'party-platter': [{ img: table, cap: 'A Kitchen 121 table spread' }],
+};
+const photos = REAL[s.id] ?? [];
 ---
 <section class="cat" id={`${prefix}-${s.id}`} data-cat>
   <header>
@@ -14,7 +27,7 @@ const photos = (s.photos ?? []).slice(0, 3);
   </header>
   {photos.length > 0 && (
     <div class="strip" data-n={photos.length}>
-      {photos.map((p) => { const im = food(p.img); return <img src={im.src} alt={p.cap} title={p.cap} width={im.width} height={im.height} loading="lazy" />; })}
+      {photos.map((p) => <img src={p.img.src} alt={p.cap} title={p.cap} width={p.img.width} height={p.img.height} loading="lazy" />)}
     </div>
   )}
   <ul class="list">
@@ -32,15 +45,15 @@ const photos = (s.photos ?? []).slice(0, 3);
 
 <style>
   .cat { padding-top: clamp(2.6rem, 6vw, 4.2rem); }
-  header { text-align: center; }
-  h2 { font-size: clamp(2.2rem, 5vw, 3.4rem); }
-  h2 span { display: inline-block; padding: .16em .5em .07em; background: var(--green); color: #fff; transform: rotate(-1.5deg); }
-  .note { margin: 1rem auto 0; max-width: 44rem; font-size: .95rem; color: #5f5f5f; }
+  header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .4rem 2rem; padding-bottom: .9rem; border-bottom: 1px solid var(--rule); }
+  h2 { font-size: clamp(2.2rem, 4.4vw, 3.2rem); }
+  h2 span { display: inline; }
+  .note { margin: 0; max-width: 34rem; font-size: .92rem; color: var(--muted); }
   .note b { color: var(--green); font-weight: 600; white-space: nowrap; }
   .strip { display: flex; gap: 10px; margin-top: 1.6rem; }
-  .strip img { flex: 1; min-width: 0; width: 0; height: clamp(96px, 15vw, 180px); object-fit: cover; border-radius: 14px; background: #eee; }
+  .strip img { flex: 1; min-width: 0; width: 0; height: clamp(120px, 18vw, 220px); object-fit: cover; border-radius: 4px; background: #eee; }
   .list { list-style: none; margin: 1.4rem 0 0; padding: 0; columns: 2; column-gap: clamp(2rem, 5vw, 4.5rem); }
-  .list li { break-inside: avoid; padding: .8rem 0; border-bottom: 1px solid rgb(0 0 0 / .1); }
+  .list li { break-inside: avoid; padding: .8rem 0; border-bottom: 1px solid var(--rule); }
   .row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
   .n { font-weight: 600; font-size: 1.03rem; line-height: 1.3; }
   .raw { color: var(--green); margin-left: 1px; }
@@ -49,5 +62,5 @@ const photos = (s.photos ?? []).slice(0, 3);
   .serves { font-weight: 600; color: #444; }
   .mark { display: inline-block; margin-left: .4rem; padding: 0 .32rem; border: 1px solid #b9b9b9; border-radius: 4px; font-size: .64rem; font-weight: 700; letter-spacing: .06em; line-height: 1.5; color: #6b6b6b; text-transform: uppercase; vertical-align: 2px; }
   .mark.spicy { border-color: #d9a39f; color: #b3261e; }
-  @media (max-width: 760px) { .list { columns: 1; } .d { padding-right: 1.5rem; } .strip { gap: 6px; } .strip img { border-radius: 10px; } }
+  @media (max-width: 760px) { .list { columns: 1; } .d { padding-right: 1.5rem; } .strip { gap: 6px; } .strip img { border-radius: 4px; } }
 </style>

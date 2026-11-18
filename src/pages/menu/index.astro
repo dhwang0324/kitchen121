@@ -9,7 +9,7 @@ import { LOCATIONS, address, directions } from '../../data/site';
 import { MENUS, RAW_NOTICE } from '../../data/menu';
 ---
 <Site title="Menu | Kitchen 121" description="Kitchen 121 menus for Duluth and Hamilton Mill: signature chicken, sushi rolls, bowls and party platters." active="menu">
-  <PageHero eyebrow="Clean food for your body and soul" title="The Menu" lead="Our two kitchens have slightly different menus. Pick your location to see what it serves." banner="menu" position="64% 50%" />
+  <PageHero eyebrow="Chef-crafted kitchen" title="The Menu" lead="Our two kitchens have slightly different menus. Pick your location to see what it serves." banner="menu" position="64% 50%" />
 
   <div class="menu" id="menu">
     <!-- Runs before the menus are painted, so the right location shows without a flash. -->
@@ -20,7 +20,7 @@ import { MENUS, RAW_NOTICE } from '../../data/menu';
     </script>
 
     <div class="container pick">
-      <p class="eyebrow">Choose your kitchen</p>
+      <p class="k-label">Choose your kitchen</p>
       <div class="switch" role="group" aria-label="Choose a location">
         {LOCATIONS.map((l) => <button type="button" data-set-loc={l.id} aria-pressed="false">{l.short}</button>)}
       </div>
@@ -43,16 +43,12 @@ import { MENUS, RAW_NOTICE } from '../../data/menu';
     <div class="container sheet"><p class="fine"><b>*</b> {RAW_NOTICE}</p></div>
   </div>
 
-  <section class="order on-dark">
+  <section class="order cream">
     <div class="container">
       {LOCATIONS.map((l) => (
-        <div data-loc-only={l.id}>
-          <p class="eyebrow">{l.name}</p>
-          <h2 class="h2">Ready to order?</h2>
-          <div class="cta">
-            <a class="pill" href={l.order.clover} data-order={l.id}><span>Order Now</span><span class="arrow">&rarr;</span></a>
-            <a class="pill pill--ghost" href={`tel:${l.tel}`}>Call {l.phone}</a>
-          </div>
+        <div class="k-sh ord" data-loc-only={l.id}>
+          <h2>Ready to order?</h2>
+          <div class="cta"><a class="pill pill--sm" href={l.order.clover} data-order={l.id}><span>Order {l.short}</span><span class="arrow">&rarr;</span></a><a class="k-tl" href={`tel:${l.tel}`}>Call {l.phone}</a></div>
         </div>
       ))}
     </div>
@@ -63,26 +59,27 @@ import { MENUS, RAW_NOTICE } from '../../data/menu';
   /* Show only the chosen location's parts. With no choice set (no JavaScript) everything stays visible. */
   html[data-loc="duluth"] [data-loc-only="hamilton-mill"], html[data-loc="hamilton-mill"] [data-loc-only="duluth"] { display: none !important; }
   html[data-loc] .nojs { display: none; }
-  html:not([data-loc]) .switch, html:not([data-loc]) .pick .eyebrow { display: none; }
+  html:not([data-loc]) .switch, html:not([data-loc]) .pick .k-label { display: none; }
 </style>
 <style>
-  .menu { background: var(--paper); color: var(--ink); padding-bottom: clamp(56px, 8vw, 96px); scroll-margin-top: 4.5rem; }
-  .pick { text-align: center; padding-block: clamp(2rem, 5vw, 3.2rem) 0; }
-  .switch { display: inline-flex; padding: 5px; border-radius: 9999px; background: #fff; box-shadow: 0 6px 24px rgb(0 0 0 / .08), inset 0 0 0 2px var(--ink); }
-  .switch button { border: 0; background: transparent; color: var(--ink); cursor: pointer; padding: .7rem clamp(1.1rem, 4vw, 2.4rem) .6rem; border-radius: 9999px; font-family: var(--display); font-weight: 800; font-size: clamp(1.3rem, 3.4vw, 1.8rem); letter-spacing: .06em; text-transform: uppercase; line-height: 1; transition: background-color .2s, color .2s; }
-  .switch button[aria-pressed="true"] { background: var(--green); color: #fff; }
-  .switch button:not([aria-pressed="true"]):hover { background: rgb(20 20 20 / .07); }
-  .info { margin-top: 1.2rem; }
-  .info p { margin: 0 0 1rem; font-size: .98rem; color: #4d4d4d; }
+  .menu { background: var(--cream); color: var(--body-ink); padding-bottom: clamp(40px, 6vw, 72px); scroll-margin-top: 4.5rem; }
+  .pick { padding-block: clamp(2rem, 5vw, 3.2rem) 0; text-align: center; }
+  .switch { display: inline-flex; gap: clamp(1.4rem, 5vw, 3rem); border-bottom: 1px solid var(--rule); }
+  .switch button { border: 0; background: none; color: #8a8070; cursor: pointer; padding: .4rem .2rem .7rem; margin-bottom: -1px; border-bottom: 3px solid transparent; font-family: var(--display); font-weight: 800; font-size: clamp(1.6rem, 4vw, 2.4rem); letter-spacing: .04em; text-transform: uppercase; line-height: 1; transition: color .2s, border-color .2s; }
+  .switch button[aria-pressed="true"] { color: var(--body-ink); border-bottom-color: var(--green); }
+  .switch button:not([aria-pressed="true"]):hover { color: var(--body-ink); }
+  .info { margin-top: 1.1rem; }
+  .info p { margin: 0 0 1rem; font-size: .98rem; color: var(--muted); }
   .info p a { color: inherit; font-weight: 600; text-decoration: none; border-bottom: 2px solid rgb(15 102 54 / .35); }
   .info p a:hover { color: var(--green); border-bottom-color: var(--green); }
   .sheet { max-width: 64rem; }
   .nojs { font-size: clamp(2.6rem, 6vw, 4rem); text-align: center; padding-top: 3rem; }
-  .fine { margin: clamp(2rem, 4vw, 3rem) 0 0; font-size: .82rem; line-height: 1.5; color: #6b6b6b; }
+  .fine { margin: clamp(2rem, 4vw, 3rem) 0 0; font-size: .82rem; line-height: 1.5; color: var(--muted); }
   .fine b { color: var(--green); }
-  .order { text-align: center; background: var(--ink); padding: clamp(56px, 8vw, 104px) 0; }
-  .order h2 { margin-bottom: 1.6rem; }
-  .order .cta { display: flex; flex-wrap: wrap; justify-content: center; gap: .9rem; }
+  .order { padding: 0 0 clamp(56px, 8vw, 96px); }
+  .order .container { max-width: 64rem; }
+  .ord { border-top: 1px solid var(--rule); padding-top: 1.4rem; align-items: center; }
+  .order .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1.2rem; }
 </style>
 
 <script>

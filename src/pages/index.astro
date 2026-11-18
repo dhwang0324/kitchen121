@@ -8,6 +8,7 @@ import { u, LOCATIONS, HOURS, INSTAGRAM, INSTAGRAM_HANDLE, directions } from '..
 import { MENUS } from '../data/menu';
 import { BANNERS } from '../data/banners';
 import { STOREFRONTS } from '../data/storefronts';
+import { REVIEWS } from '../data/reviews';
 import roll from '../assets/home/roll.webp';
 import red from '../assets/home/red-pepper.webp';
 import soy from '../assets/home/soy-garlic.webp';
@@ -82,18 +83,18 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
     </div>
   </section>
 
-  <section class="reviews">
-    <div class="container rg">
-      <h2 class="side">What our<br />guests say</h2>
-      <div class="r3">
-        {[1, 2, 3].map(() => (
-          <blockquote>
-            <span class="stars" aria-hidden="true">★★★★★</span>
-            <p>[Customer review to be added]</p>
-            <cite>[Name, Google or Yelp]</cite>
-          </blockquote>
-        ))}
-      </div>
+  <section class="reviews" aria-label="Guest reviews">
+    <div class="container"><header class="sh"><h2>What our guests say</h2><span class="hint"><span class="stars" aria-hidden="true">★★★★★</span> Google reviews</span></header></div>
+    <div class="strip">
+      <ul class="track">
+        {[0, 1].map((copy) => REVIEWS.map((r) => (
+          <li aria-hidden={copy ? 'true' : undefined}>
+            <span class="stars" aria-label={copy ? undefined : '5 out of 5 stars'}>★★★★★</span>
+            <p>“{r.text}”</p>
+            <cite>{r.name} &middot; Google</cite>
+          </li>
+        )))}
+      </ul>
     </div>
   </section>
 
@@ -213,13 +214,22 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
     .ov h3 { margin-top: .2rem; font-size: 1.5rem; }
     .ov b { display: block; margin-top: .3rem; font-family: var(--display); font-size: 1.15rem; color: #cfe9d8; }
   }
-  .reviews { padding: clamp(56px, 8vw, 100px) 0; border-bottom: 1px solid var(--rule); }
-  .rg { display: grid; grid-template-columns: 1fr 3fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
-  .r3 { display: grid; grid-template-columns: repeat(3, 1fr); }
-  .r3 blockquote { margin: 0; padding: 0 clamp(1rem, 2.5vw, 2rem); border-left: 1px solid var(--rule); }
+  /* Reviews: a slow, endless strip of review cards (pauses on hover; still and scrollable with reduced motion). */
+  .reviews { padding: clamp(56px, 8vw, 100px) 0; border-bottom: 1px solid var(--rule); overflow: hidden; }
+  .hint { color: #5d564c; font-size: .95rem; }
+  .strip { mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent); }
+  .track { list-style: none; margin: 0; padding: 0 0 4px 4vw; display: flex; gap: 18px; width: max-content; }
+  .track li { width: 360px; padding: 1.5rem 1.7rem; background: #fff; border: 1px solid var(--rule); border-radius: 6px; display: grid; gap: .7rem; align-content: start; }
+  .track p { margin: 0; font-size: 1.02rem; line-height: 1.55; color: #3f3a33; }
+  .track cite { font-style: normal; font-family: var(--display); font-weight: 600; font-size: .9rem; letter-spacing: .1em; text-transform: uppercase; color: #9b9283; }
+  @media (prefers-reduced-motion: no-preference) {
+    .track { animation: rv-slide 120s linear infinite; }
+    .strip:hover .track { animation-play-state: paused; }
+    @keyframes rv-slide { to { transform: translateX(-50%); } }
+  }
+  @media (prefers-reduced-motion: reduce) { .strip { overflow-x: auto; } .track li[aria-hidden="true"] { display: none; } }
+  @media (max-width: 860px) { .track li { width: 78vw; } }
   .stars { color: #c99a2e; letter-spacing: .2em; font-size: .95rem; }
-  .r3 p { margin: .9rem 0; font-size: 1.1rem; line-height: 1.5; color: #8a8070; font-style: italic; }
-  .r3 cite { font-style: normal; font-family: var(--display); font-weight: 600; font-size: .95rem; letter-spacing: .1em; text-transform: uppercase; color: #9b9283; }
 
   .visit { padding: clamp(64px, 9vw, 120px) 0; }
   .hrs { font-size: 1rem; color: #5d564c; }
@@ -238,9 +248,7 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
   .ig a:hover img { transform: scale(1.06); }
 
   @media (max-width: 900px) {
-    .rg, .v2 { grid-template-columns: 1fr; }
-    .r3 { grid-template-columns: 1fr; }
-    .r3 blockquote { border-left: 0; border-top: 1px solid var(--rule); padding: 1.2rem 0; }
+    .v2 { grid-template-columns: 1fr; }
     .ig { grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .statement .container::before, .statement .container::after { display: none; }
   }

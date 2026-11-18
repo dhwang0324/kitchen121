@@ -1,29 +1,32 @@
 ---
-// Home. Structure follows the Chicken 121 home (hero, signature dishes, photo band, about, menu teaser, Instagram),
-// plus the location chooser that is the main job of the current kitchen121.com home page.
-// Copy and facts come from the client's current site and printed menus; photos are cropped from their own images.
+// Home. Blend of design concepts 1 (warm cream sections) and 4 (thin rules, open space), in Barlow Condensed + Barlow.
+// Facts, prices and hours come from src/data/; photos are the restaurant's own (src/assets/home/: frames from their
+// video and table-spread photo). Reviews are empty slots until the owner supplies real ones.
 import Site from '../layouts/Site.astro';
-import { u, LOCATIONS, HOURS, TAGLINE, INSTAGRAM, INSTAGRAM_HANDLE, food, directions } from '../data/site';
-import { partyPlatters } from '../data/menu';
+import Fresh from '../assets/fresh-begins-here.svg';
+import { u, LOCATIONS, HOURS, INSTAGRAM, INSTAGRAM_HANDLE, directions } from '../data/site';
+import { MENUS } from '../data/menu';
 import { BANNERS } from '../data/banners';
 import { STOREFRONTS } from '../data/storefronts';
-import Fresh from '../assets/fresh-begins-here.svg';
+import roll from '../assets/home/roll.webp';
+import red from '../assets/home/red-pepper.webp';
+import soy from '../assets/home/soy-garlic.webp';
+import bowl from '../assets/home/bulgogi-bowl.webp';
+import table from '../assets/home/table.webp';
+import salad from '../assets/home/salad.webp';
+import spread from '../assets/home/spread.webp';
 const hero = BANNERS.home;
-
-const signature = [
-  { img: 'chicken-soy-garlic', name: 'Oriental Soy Garlic Chicken', price: 17, line: '121 Signature Chicken' },
-  { img: 'special-yummy', name: '121 Yummy Yummy Roll', price: 16, line: '121 Special Roll' },
-  { img: 'chicken-snow-cheese', name: 'Snow Cheese Chicken', price: 17, line: '121 Signature Chicken' },
-  { img: 'special-extreme-beauty', name: '121 Extreme Beauty Roll', price: 16, line: '121 Special Roll' },
-  { img: 'chicken-red-pepper', name: 'Red Pepper Chicken', price: 17, line: '121 Signature Chicken' },
-  { img: 'special-double-shrimp', name: '121 Double Shrimp Tempura Roll', price: 16, line: '121 Special Roll' },
+const all = [...MENUS.duluth, ...MENUS['hamilton-mill']];
+const from = (ids: string[]) => Math.min(...all.filter((s) => ids.includes(s.id)).flatMap((s) => s.items.map((i) => i.p)));
+const dishes = [
+  { img: red, name: '121 Signature Chicken', note: 'A 1.5 lb chicken breast, fried crisp, with a hand-made sauce. Eight flavors.', price: from(['signature-chicken']) },
+  { img: roll, name: '121 Rolls', note: 'The 121 special rolls, rainbow, caterpillar, spicy tuna and more.', price: from(['roll']) },
+  { img: bowl, name: 'Bowls & Salads', note: 'Hot bowls, sushi and poke bowls, house salads.', price: from(['hot-bowl', 'sushi-bowl', 'salad-bowl', 'cool-salad']) },
 ];
-const strip = ['c-roll-platter', 'chicken-sweet-onion', 'c-sashimi', 'hot-bulgogi', 'c-poke', 'chicken-lemon-pepper', 'c-roll'];
-const insta = ['c-poke', 'chicken-jalapeno-parmesan', 'roll-caterpillar', 'hot-salmon', 'c-sashimi', 'sushi-bowl'];
-const chef = food('chef');
-const fromPrice = Math.min(...partyPlatters.items.map((i) => i.p));
+const insta = [soy, roll, spread, red, bowl, salad];
+const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.height });
 ---
-<Site title="Kitchen 121 | Clean food for your body and soul" active="home">
+<Site title="Kitchen 121 | Fresh begins here" active="home">
   <section class="hero" aria-label="Welcome">
     <img class="photo" src={hero.src} srcset={hero.srcset} sizes="100vw" width={hero.width} height={hero.height} alt={hero.alt} fetchpriority="high" />
     <div class="shade"></div>
@@ -34,35 +37,74 @@ const fromPrice = Math.min(...partyPlatters.items.map((i) => i.p));
         <p class="lead">Signature chicken, sushi rolls and bowls by Chef Ji Young Lee.</p>
         <div class="cta">
           <a class="pill" href={u('locations/')} data-order><span>Order Now</span><span class="arrow">&rarr;</span></a>
-          <a class="pill pill--ghost" href="#kitchens">See the Menus</a>
+          <a class="pill pill--ghost" href={u('menu/')}>See the Menu</a>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="kitchens" id="kitchens">
-    <div class="container">
-      <div class="head" data-a>
-        <p class="eyebrow">Two locations, one kitchen</p>
-        <h2 class="h2">Pick your kitchen</h2>
-        <p class="sub">Both of our locations offer the same high quality casual dining. Choose your location to see the menu and order online.</p>
+  <section class="statement">
+    <div class="container"><p>Chef-crafted Korean fried chicken, sushi and bowls. <span>Since 2017.</span></p></div>
+  </section>
+
+  <section class="chef">
+    <div class="container grid">
+      <div class="txt">
+        <p class="label">Chef-crafted kitchen</p>
+        <h2>Chef-crafted, since 2017</h2>
+        <p class="body">Every plate at Kitchen 121 is made by hand by Chef Ji Young Lee and the kitchen team, from the hand-made sauces on our chicken to the rolls made to order. Le Cordon Bleu trained, and formerly of The Ritz-Carlton, Atlanta.</p>
+        <ul class="feats">
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M13 3h6v5l3 4v15a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V12l3-4z M10 17h12"/></svg><b>House-made sauces</b></li>
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="17" r="11"/><path d="M16 10v7l5 3 M12 3h8"/></svg><b>Made to order</b></li>
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 29s-9-8-9-15a9 9 0 0 1 18 0c0 7-9 15-9 15z"/><circle cx="16" cy="14" r="3.2"/></svg><b>Two kitchens</b></li>
+        </ul>
       </div>
-      <div class="two">
-        {LOCATIONS.map((l, i) => (
-          <article class="kcard" data-a>
-            <a class="art" href={l.menu} tabindex="-1" aria-hidden="true"><img src={STOREFRONTS[l.id].img.src} alt="" width={STOREFRONTS[l.id].img.width} height={STOREFRONTS[l.id].img.height} style={`object-position:${STOREFRONTS[l.id].position}`} loading="lazy" /><span class="num">{String(i + 1).padStart(2, '0')}</span></a>
-            <div class="body">
+      <figure class="ph"><img {...Img(soy)} alt="Soy garlic fried chicken topped with crispy noodles and scallion" loading="lazy" /></figure>
+    </div>
+  </section>
+
+  <section class="dishes">
+    <div class="container">
+      <header class="sh"><h2>Signature dishes</h2><a class="tl" href={u('menu/')}>Full menu &rarr;</a></header>
+      <div class="d3">
+        {dishes.map((d) => (
+          <article>
+            <a href={u('menu/')} class="dimg"><img {...Img(d.img)} alt={d.name} loading="lazy" /></a>
+            <div class="dr"><h3>{d.name}</h3><b>from ${d.price}</b></div>
+            <p>{d.note}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="reviews">
+    <div class="container rg">
+      <h2 class="side">What our<br />guests say</h2>
+      <div class="r3">
+        {[1, 2, 3].map(() => (
+          <blockquote>
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <p>[Customer review to be added]</p>
+            <cite>[Name, Google or Yelp]</cite>
+          </blockquote>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="visit" id="kitchens">
+    <div class="container">
+      <header class="sh"><h2>Visit us</h2><span class="hrs">{HOURS[1].days} {HOURS[1].time} &middot; {HOURS[0].days} {HOURS[0].time.toLowerCase()}</span></header>
+      <div class="v2">
+        {LOCATIONS.map((l) => (
+          <article>
+            <img {...Img(STOREFRONTS[l.id].img)} alt={STOREFRONTS[l.id].alt} style={`object-position:${STOREFRONTS[l.id].position}`} loading="lazy" />
+            <div class="vb">
               <h3>{l.short}</h3>
-              <p class="addr"><a href={directions(l)} rel="noopener">{l.street}, {l.city}</a></p>
-              <p class="note">{l.note}</p>
-              <dl>
-                <div><dt>Hours</dt><dd>Tue to Sun, 11:30am to 9pm<br />Monday closed</dd></div>
-                <div><dt>Phone</dt><dd><a href={`tel:${l.tel}`}>{l.phone}</a></dd></div>
-              </dl>
-              <div class="cta">
-                <a class="pill" href={l.menu}><span>View Menu</span><span class="arrow">&rarr;</span></a>
-                <a class="pill pill--ink" href={l.order.clover} data-order={l.id}>Order Now</a>
-              </div>
+              <p>{l.street}<br />{l.city}</p>
+              <p class="tel"><a href={`tel:${l.tel}`}>{l.phone}</a></p>
+              <div class="acts"><a class="pill pill--sm" href={l.order.clover} data-order={l.id}>Order</a><a class="tl" href={l.menu}>Menu</a><a class="tl" href={directions(l)} rel="noopener">Directions</a></div>
             </div>
           </article>
         ))}
@@ -70,76 +112,10 @@ const fromPrice = Math.min(...partyPlatters.items.map((i) => i.p));
     </div>
   </section>
 
-  <section class="sig" aria-label="Signature dishes">
-    <div class="container">
-      <div class="head" data-a>
-        <p class="eyebrow">House favorites</p>
-        <h2 class="h2">Signature Dishes</h2>
-        <p class="sub">House craft chicken with hand made sauce, and the rolls that carry our name.</p>
-      </div>
-      <ul>
-        {signature.map((d) => (
-          <li data-a>
-            <a href="#kitchens">
-              <span class="art"><span class="tile"><img src={food(d.img).src} alt={d.name} width={food(d.img).width} height={food(d.img).height} loading="lazy" /></span><i class="tag">${d.price}</i></span>
-              <b>{d.name}</b>
-              <span class="line">{d.line}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <section class="band" aria-hidden="true">
-    <div class="strip">{strip.map((s) => <span class="tile"><img src={food(s).src} alt="" width={food(s).width} height={food(s).height} loading="lazy" /></span>)}</div>
-  </section>
-
-  <section class="about on-dark">
-    <div class="container wrap">
-      <figure class="portrait" data-a>
-        <span class="frame"><span class="tile"><img src={chef.src} alt="Illustrated chef hat" width={chef.width} height={chef.height} loading="lazy" /></span></span>
-        <figcaption>Chef Ji Young Lee</figcaption>
-      </figure>
-      <div class="txt" data-a>
-        <p class="eyebrow">{TAGLINE}</p>
-        <h2 class="h2">By Chef Ji Young Lee</h2>
-        <p class="text">Kitchen 121 has been cooking in Duluth since 2017, and now in Hamilton Mill too. Owner chef Ji Young Lee trained at Le Cordon Bleu College of Culinary Arts and worked at The Ritz-Carlton, Atlanta before opening Kitchen 121.</p>
-        <ul class="facts">
-          <li><b>Le Cordon Bleu</b><span>College of Culinary Arts</span></li>
-          <li><b>2015 to 2016</b><span>The Ritz-Carlton, Atlanta</span></li>
-          <li><b>2017 to present</b><span>Group 121, owner chef</span></li>
-          <li><b>Top 100</b><span>Yelp Sushi Spots 2024</span></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="cater">
-    <div class="container cin">
-      <div data-a>
-        <p class="eyebrow">Catering 121</p>
-        <h2 class="h2">Feeding a crowd?</h2>
-        <p class="text">Kitchen 121 also offers catering services. Whether you prefer boxes or trays, we have the perfectly-portioned catering option for your family or corporate event.</p>
-        <a class="pill pill--white" href={u('catering/')}><span>See Catering</span><span class="arrow">&rarr;</span></a>
-      </div>
-      <div class="plat" data-a>
-        <span class="tile"><img src={food('hm-all-star').src} alt="Chicken All Star platter with six flavors of signature chicken" width={food('hm-all-star').width} height={food('hm-all-star').height} loading="lazy" /></span>
-        <p class="from"><span>Party platters from</span><b>${fromPrice}</b></p>
-      </div>
-    </div>
-  </section>
-
   <section class="insta">
     <div class="container">
-      <div class="head" data-a>
-        <p class="eyebrow">Instagram</p>
-        <h2 class="h2">Follow {INSTAGRAM_HANDLE}</h2>
-      </div>
-      <ul data-a>
-        {insta.map((s) => <li><a class="tile" href={INSTAGRAM} rel="noopener" aria-label={`Kitchen 121 on Instagram (${INSTAGRAM_HANDLE})`}><img src={food(s).src} alt="" width={food(s).width} height={food(s).height} loading="lazy" /></a></li>)}
-      </ul>
-      <p class="more" data-a><a class="pill pill--ink" href={INSTAGRAM} rel="noopener"><span>Open Instagram</span><span class="arrow">&rarr;</span></a></p>
+      <header class="sh"><h2>On Instagram</h2><a class="tl" href={INSTAGRAM} rel="noopener">{INSTAGRAM_HANDLE} &rarr;</a></header>
+      <div class="ig">{insta.map((i) => <a href={INSTAGRAM} rel="noopener" aria-label={`Kitchen 121 on Instagram (${INSTAGRAM_HANDLE})`}><img {...Img(i)} alt="" loading="lazy" /></a>)}</div>
     </div>
   </section>
 </Site>
@@ -177,88 +153,72 @@ const fromPrice = Math.min(...partyPlatters.items.map((i) => i.p));
     .cta { justify-content: center; }
   }
 
-  /* ---------- shared section heads ---------- */
-  .head { text-align: center; max-width: 44rem; margin: 0 auto clamp(2rem, 4vw, 3.4rem); }
-  .sub { margin: .7rem auto 0; max-width: 36rem; color: #5d5d5d; }
+  /* ---------- shared: cream paper, thin rules ---------- */
+  .statement, .chef, .dishes, .reviews, .visit, .insta { --cream: #f6f1e8; --rule: #d8cfbe; background: var(--cream); color: #2a2622; }
+  section h2 { font-size: clamp(2.6rem, 5vw, 4rem); line-height: .95; }
+  .label { margin: 0 0 .6rem; font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: .2em; text-transform: uppercase; color: var(--green); }
+  .tl { color: inherit; font-weight: 600; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; text-decoration-color: var(--green); white-space: nowrap; }
+  .tl:hover { color: var(--green); }
+  .sh { display: flex; align-items: baseline; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; padding-bottom: 1.1rem; margin-bottom: clamp(1.6rem, 3vw, 2.4rem); border-bottom: 1px solid var(--rule); }
+  img { display: block; width: 100%; height: auto; object-fit: cover; }
 
-  /* ---------- location chooser ---------- */
-  .kitchens { background: var(--paper); color: var(--ink); padding: clamp(56px, 8vw, 110px) 0; }
-  .two { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); }
-  .kcard { background: #fff; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 40px rgb(0 0 0 / .07); display: flex; flex-direction: column; }
-  .kcard .art { position: relative; display: block; aspect-ratio: 16 / 10; background: #1b1b1b; border-radius: 30px 30px 0 0; }
-  .kcard .art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 30px 30px 0 0; }
-  .num { position: absolute; left: 1.4rem; bottom: -1.1rem; display: grid; place-items: center; width: 4.2rem; height: 3.2rem; background: var(--green); color: #fff; font-family: var(--display); font-weight: 800; font-size: 2rem; line-height: 1; padding-top: .15rem; transform: rotate(8deg); box-shadow: 0 10px 24px rgb(0 0 0 / .25); }
-  .body { padding: clamp(1.8rem, 3vw, 2.6rem); padding-top: 2.2rem; display: flex; flex-direction: column; flex: 1; }
-  .kcard h3 { font-size: clamp(2.6rem, 5vw, 4rem); margin-bottom: .5rem; }
-  .addr { margin: 0; font-weight: 600; font-size: 1.05rem; }
-  .addr a, dd a { color: inherit; text-decoration: none; border-bottom: 2px solid rgb(15 102 54 / .35); }
-  .addr a:hover, dd a:hover { border-bottom-color: var(--green); color: var(--green); }
-  .note { margin: .3rem 0 1.2rem; color: #666; font-size: .95rem; }
-  dl { margin: 0 0 1.6rem; display: grid; grid-template-columns: 1.7fr 1fr; gap: 1rem; }
-  dt { font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: .12em; text-transform: uppercase; color: var(--green); }
-  dd { margin: .1rem 0 0; font-weight: 600; line-height: 1.45; }
-  .kcard .cta { margin-top: auto; }
-  @media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
-  @media (max-width: 420px) { dl { grid-template-columns: 1fr; } }
+  .statement { padding: clamp(40px, 6vw, 72px) 0; text-align: center; }
+  .statement .container { display: flex; align-items: center; gap: 2rem; }
+  .statement .container::before, .statement .container::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+  .statement p { margin: 0; max-width: 40rem; font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.5; color: #4a443c; }
+  .statement span { color: var(--green); font-weight: 600; }
 
-  /* ---------- signature dishes ---------- */
-  .sig { background: var(--paper); color: var(--ink); padding: 0 0 clamp(64px, 9vw, 120px); text-align: center; }
-  .sig ul { list-style: none; margin: 0 auto; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(36px, 5vw, 64px) 4%; }
-  .sig li { flex: 0 1 29%; }
-  .sig a { display: block; color: inherit; text-decoration: none; }
-  .sig .art { position: relative; display: block; margin: 0 auto 1.3rem; width: 86%; }
-  .sig .art::before { content: ''; position: absolute; inset: -6% -7%; background: var(--charcoal); border-radius: 30px; transform: rotate(-6deg); transition: transform .35s cubic-bezier(.2,.7,.2,1); }
-  .sig li:nth-child(even) .art::before { background: var(--green); transform: rotate(6deg); }
-  .sig a:hover .art::before { transform: rotate(0deg); }
-  .sig .tile { position: relative; aspect-ratio: 4 / 3; transition: transform .35s cubic-bezier(.2,.7,.2,1); }
-  .sig a:hover .tile { transform: scale(1.03); }
-  .tag { position: absolute; z-index: 2; right: -4%; bottom: -8%; background: #fff; color: var(--green); font-family: var(--display); font-weight: 800; font-style: normal; font-size: 1.5rem; line-height: 1; padding: .5rem .9rem .4rem; border-radius: 999px; box-shadow: 0 8px 18px rgb(0 0 0 / .18); transform: rotate(5deg); }
-  .sig b { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(1.7rem, 2.6vw, 2.3rem); line-height: 1; text-transform: uppercase; letter-spacing: .02em; }
-  .line { display: block; margin-top: .35rem; font-size: .92rem; color: #666; }
-  @media (max-width: 860px) { .sig li { flex-basis: 44%; } .tag { font-size: 1.2rem; } }
+  .chef { padding: 0 0 clamp(64px, 9vw, 120px); }
+  .chef .grid { display: grid; grid-template-columns: 5fr 6fr; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
+  .chef .body { margin: 1.1rem 0 0; font-size: 1.1rem; line-height: 1.65; color: #4a443c; max-width: 34rem; }
+  .feats { list-style: none; margin: 2rem 0 0; padding: 1.6rem 0 0; border-top: 1px solid var(--rule); display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .feats li { display: grid; gap: .6rem; justify-items: start; }
+  .feats svg { width: 2rem; height: 2rem; fill: none; stroke: var(--green); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .feats b { font-family: var(--display); font-weight: 700; font-size: 1.15rem; letter-spacing: .06em; text-transform: uppercase; line-height: 1.1; }
+  .ph { margin: 0; border-radius: 4px; overflow: hidden; }
+  .ph img { aspect-ratio: 5 / 4; }
 
-  /* ---------- photo band: a tilted strip of dishes ---------- */
-  .band { background: var(--ink); padding: clamp(34px, 5vw, 60px) 0; overflow: hidden; }
-  .strip { display: flex; gap: 16px; width: max-content; margin-left: -6vw; transform: rotate(-2deg); }
-  .strip .tile { width: clamp(180px, 22vw, 320px); aspect-ratio: 4 / 3; flex: none; }
-  @media (prefers-reduced-motion: no-preference) {
-    .strip { animation: drift 60s linear infinite alternate; }
-    @keyframes drift { from { transform: rotate(-2deg) translateX(0); } to { transform: rotate(-2deg) translateX(-18vw); } }
+  .dishes { padding: 0 0 clamp(64px, 9vw, 120px); }
+  .d3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 36px); }
+  .dimg { display: block; border-radius: 4px; overflow: hidden; }
+  .dimg img { aspect-ratio: 4 / 3; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+  .dimg:hover img { transform: scale(1.04); }
+  .dr { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-top: 1rem; padding-bottom: .5rem; border-bottom: 1px solid var(--rule); }
+  .dr h3 { font-size: 1.7rem; }
+  .dr b { font-family: var(--display); font-weight: 700; font-size: 1.25rem; color: var(--green); white-space: nowrap; }
+  .d3 p { margin: .6rem 0 0; font-size: .98rem; line-height: 1.55; color: #5d564c; }
+
+  .reviews { padding: clamp(56px, 8vw, 100px) 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .rg { display: grid; grid-template-columns: 1fr 3fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+  .r3 { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .r3 blockquote { margin: 0; padding: 0 clamp(1rem, 2.5vw, 2rem); border-left: 1px solid var(--rule); }
+  .stars { color: #c99a2e; letter-spacing: .2em; font-size: .95rem; }
+  .r3 p { margin: .9rem 0; font-size: 1.1rem; line-height: 1.5; color: #8a8070; font-style: italic; }
+  .r3 cite { font-style: normal; font-family: var(--display); font-weight: 600; font-size: .95rem; letter-spacing: .1em; text-transform: uppercase; color: #9b9283; }
+
+  .visit { padding: clamp(64px, 9vw, 120px) 0; }
+  .hrs { font-size: 1rem; color: #5d564c; }
+  .v2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); }
+  .v2 article { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; align-items: center; }
+  .v2 img { aspect-ratio: 4 / 3; border-radius: 4px; height: 100%; }
+  .vb h3 { font-size: 2.3rem; }
+  .vb p { margin: .5rem 0 0; color: #4a443c; line-height: 1.5; }
+  .tel a { color: inherit; font-weight: 600; text-decoration: none; }
+  .acts { display: flex; flex-wrap: wrap; align-items: center; gap: 1.1rem; margin-top: 1.2rem; }
+
+  .insta { padding: 0 0 clamp(64px, 9vw, 120px); }
+  .ig { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .ig a { display: block; overflow: hidden; border-radius: 4px; }
+  .ig img { aspect-ratio: 1; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+  .ig a:hover img { transform: scale(1.06); }
+
+  @media (max-width: 900px) {
+    .chef .grid, .rg, .v2 { grid-template-columns: 1fr; }
+    .ph { order: -1; }
+    .d3, .r3 { grid-template-columns: 1fr; }
+    .r3 blockquote { border-left: 0; border-top: 1px solid var(--rule); padding: 1.2rem 0; }
+    .ig { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .statement .container::before, .statement .container::after { display: none; }
   }
-
-  /* ---------- chef ---------- */
-  .about { background: var(--charcoal); padding: clamp(64px, 9vw, 120px) 0; }
-  .wrap { display: grid; grid-template-columns: minmax(180px, 280px) 1fr; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
-  .portrait { margin: 0; }
-  .frame { position: relative; display: block; }
-  .frame::before { content: ''; position: absolute; inset: -5% -7%; background: var(--green); border-radius: 30px; transform: rotate(7deg); }
-  .portrait .tile { position: relative; aspect-ratio: 9 / 10; }
-  .portrait figcaption { margin-top: 1.8rem; text-align: center; font-family: var(--display); font-weight: 700; font-size: 1.2rem; letter-spacing: .12em; text-transform: uppercase; color: #cfcfcf; }
-  .about .text { margin: 1.1rem 0 0; max-width: 38rem; font-size: 1.08rem; color: #d6d6d6; }
-  .facts { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-  .facts li { border-top: 3px solid var(--green); padding-top: .8rem; }
-  .facts b { display: block; font-family: var(--display); font-weight: 800; font-size: 1.6rem; line-height: 1; text-transform: uppercase; }
-  .facts span { display: block; margin-top: .3rem; font-size: .88rem; color: #bdbdbd; line-height: 1.35; }
-  @media (max-width: 860px) { .wrap { grid-template-columns: 1fr; } .portrait { width: min(60%, 240px); margin: 0 auto 1rem; } .txt { text-align: center; } .about .text { margin-inline: auto; } .facts { grid-template-columns: 1fr 1fr; text-align: left; } }
-
-  /* ---------- catering teaser: the one full-green moment ---------- */
-  .cater { background: var(--green); color: #fff; padding: clamp(64px, 9vw, 120px) 0; overflow: hidden; }
-  .cin { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
-  .cater .eyebrow { color: #fff; opacity: .85; }
-  .cater .text { margin: 1rem 0 1.8rem; max-width: 34rem; font-size: 1.08rem; color: #e9f3ec; }
-  .plat { position: relative; justify-self: center; width: min(100%, 380px); }
-  .plat .tile { aspect-ratio: 1; transform: rotate(5deg); border: 6px solid #fff; border-radius: 30px; }
-  .from { position: absolute; left: -1.5rem; bottom: -1.2rem; margin: 0; display: grid; background: var(--ink); color: #fff; padding: .8rem 1.2rem .6rem; border-radius: 20px; transform: rotate(-4deg); box-shadow: 0 12px 30px rgb(0 0 0 / .3); }
-  .from span { font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); line-height: 1.1; }
-  .from b { font-family: var(--display); font-weight: 800; font-size: 3rem; line-height: .95; }
-  @media (max-width: 860px) { .cin { grid-template-columns: 1fr; } .plat { width: min(72%, 300px); margin-top: 1rem; } .from { left: -.8rem; } }
-
-  /* ---------- instagram ---------- */
-  .insta { background: var(--paper); color: var(--ink); padding: clamp(64px, 9vw, 120px) 0; }
-  .insta ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
-  .insta .tile { aspect-ratio: 1; box-shadow: none; }
-  .insta .tile img { transition: transform .5s cubic-bezier(.2,.7,.2,1); }
-  .insta .tile:hover img { transform: scale(1.07); }
-  .more { text-align: center; margin: 2rem 0 0; }
-  @media (max-width: 860px) { .insta ul { grid-template-columns: repeat(3, 1fr); gap: 10px; } }
+  @media (max-width: 520px) { .v2 article { grid-template-columns: 1fr; } .feats { grid-template-columns: 1fr; } }
 </style>

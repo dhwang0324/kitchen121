@@ -47,6 +47,21 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
     <div class="container"><p>Chef-crafted Korean fried chicken, sushi and bowls. <span>Since 2017.</span></p></div>
   </section>
 
+  <section class="dishes">
+    <div class="container">
+      <header class="sh"><h2>Signature dishes</h2><a class="tl" href={u('menu/')}>Full menu &rarr;</a></header>
+      <div class="d3">
+        {dishes.map((d) => (
+          <article>
+            <a href={u('menu/')} class="dimg"><img {...Img(d.img)} alt={d.name} loading="lazy" /></a>
+            <div class="dr"><h3>{d.name}</h3><b>from ${d.price}</b></div>
+            <p>{d.note}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <section class="chef">
     <div class="container grid">
       <div class="txt">
@@ -60,21 +75,6 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
         </ul>
       </div>
       <figure class="ph"><img {...Img(soy)} alt="Soy garlic fried chicken topped with crispy noodles and scallion" loading="lazy" /></figure>
-    </div>
-  </section>
-
-  <section class="dishes">
-    <div class="container">
-      <header class="sh"><h2>Signature dishes</h2><a class="tl" href={u('menu/')}>Full menu &rarr;</a></header>
-      <div class="d3">
-        {dishes.map((d) => (
-          <article>
-            <a href={u('menu/')} class="dimg"><img {...Img(d.img)} alt={d.name} loading="lazy" /></a>
-            <div class="dr"><h3>{d.name}</h3><b>from ${d.price}</b></div>
-            <p>{d.note}</p>
-          </article>
-        ))}
-      </div>
     </div>
   </section>
 
@@ -168,17 +168,18 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
   .statement p { margin: 0; max-width: 40rem; font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.5; color: #4a443c; }
   .statement span { color: var(--green); font-weight: 600; }
 
-  .chef { padding: 0 0 clamp(64px, 9vw, 120px); }
-  .chef .grid { display: grid; grid-template-columns: 5fr 6fr; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
-  .chef .body { margin: 1.1rem 0 0; font-size: 1.1rem; line-height: 1.65; color: #4a443c; max-width: 34rem; }
-  .feats { list-style: none; margin: 2rem 0 0; padding: 1.6rem 0 0; border-top: 1px solid var(--rule); display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-  .feats li { display: grid; gap: .6rem; justify-items: start; }
-  .feats svg { width: 2rem; height: 2rem; fill: none; stroke: var(--green); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-  .feats b { font-family: var(--display); font-weight: 700; font-size: 1.15rem; letter-spacing: .06em; text-transform: uppercase; line-height: 1.1; }
+  .chef { padding: 0 0 clamp(56px, 8vw, 96px); }
+  .chef .grid { display: grid; grid-template-columns: 7fr 4fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; padding-top: clamp(28px, 4vw, 44px); border-top: 1px solid var(--rule); }
+  .chef h2 { font-size: clamp(2rem, 3.4vw, 2.8rem); }
+  .chef .body { margin: .7rem 0 0; font-size: 1rem; line-height: 1.6; color: #4a443c; max-width: 40rem; }
+  .feats { list-style: none; margin: 1.2rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem 1.8rem; }
+  .feats li { display: flex; align-items: center; gap: .5rem; }
+  .feats svg { width: 1.4rem; height: 1.4rem; fill: none; stroke: var(--green); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .feats b { font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: .06em; text-transform: uppercase; line-height: 1.1; }
   .ph { margin: 0; border-radius: 4px; overflow: hidden; }
-  .ph img { aspect-ratio: 5 / 4; }
+  .ph img { aspect-ratio: 4 / 3; }
 
-  .dishes { padding: 0 0 clamp(64px, 9vw, 120px); }
+  .dishes { padding: 0 0 clamp(48px, 7vw, 80px); }
   .d3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 36px); }
   .dimg { display: block; border-radius: 4px; overflow: hidden; }
   .dimg img { aspect-ratio: 4 / 3; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
@@ -188,7 +189,7 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
   .dr b { font-family: var(--display); font-weight: 700; font-size: 1.25rem; color: var(--green); white-space: nowrap; }
   .d3 p { margin: .6rem 0 0; font-size: .98rem; line-height: 1.55; color: #5d564c; }
 
-  .reviews { padding: clamp(56px, 8vw, 100px) 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .reviews { padding: clamp(56px, 8vw, 100px) 0; border-bottom: 1px solid var(--rule); }
   .rg { display: grid; grid-template-columns: 1fr 3fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
   .r3 { display: grid; grid-template-columns: repeat(3, 1fr); }
   .r3 blockquote { margin: 0; padding: 0 clamp(1rem, 2.5vw, 2rem); border-left: 1px solid var(--rule); }
@@ -214,7 +215,7 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
 
   @media (max-width: 900px) {
     .chef .grid, .rg, .v2 { grid-template-columns: 1fr; }
-    .ph { order: -1; }
+    .ph { order: -1; max-width: 26rem; }
     .d3, .r3 { grid-template-columns: 1fr; }
     .r3 blockquote { border-left: 0; border-top: 1px solid var(--rule); padding: 1.2rem 0; }
     .ig { grid-template-columns: repeat(3, 1fr); gap: 6px; }

@@ -8,8 +8,9 @@ const { active } = Astro.props;
 const left = [
   { label: 'Menu', href: u('menu/'), id: 'menu' },
   { label: 'Catering', href: u('catering/'), id: 'catering' },
+  { label: 'Locations', href: u('locations/'), id: 'locations' },
 ];
-const right = [{ label: 'Locations', href: u('locations/'), id: 'locations' }];
+const right: typeof left = [];
 const rows = [{ label: 'Home', href: u(), id: 'home' }, ...left, ...right];
 ---
 <header class="site-header" id="site-header">
@@ -46,10 +47,12 @@ const rows = [{ label: 'Home', href: u(), id: 'home' }, ...left, ...right];
 <style>
   .site-header { position: sticky; top: 0; z-index: 50; background: var(--cream); border-bottom: 1px solid var(--rule); transition: box-shadow .3s; }
   .site-header.scrolled { box-shadow: 0 6px 24px rgb(0 0 0 / .06); }
-  .bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1.5rem; padding-block: .85rem; }
+  .bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1.5rem; padding-block: .6rem; }
   .logo { display: block; line-height: 0; justify-self: center; }
-  .logo img { height: 2.6rem; width: auto; display: block; }
+  .logo img { height: 3.2rem; width: auto; display: block; }
   .side { display: none; align-items: center; gap: 2rem; }
+  .side--l { gap: 1.3rem; }
+  .side--l a { font-size: .88rem; letter-spacing: .03em; }
   .side--r { justify-content: flex-end; }
   .side a { color: var(--body-ink); text-decoration: none; font-size: .98rem; font-weight: 500; letter-spacing: .02em; transition: color .2s; }
   .side a:hover { color: var(--green); }

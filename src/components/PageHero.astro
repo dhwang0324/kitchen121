@@ -1,43 +1,30 @@
 ---
-// Header band for the inner pages: a full-width banner photo with a dark shade on the left for the title,
-// same structure as the Chicken 121 site's page headers.
+// Header for the inner pages: title on the left, the page's photo in an inset frame on the right, on cream paper.
 import { BANNERS, type BannerId } from '../data/banners';
 interface Props { eyebrow?: string; title: string; lead?: string; banner: BannerId; position?: string }
 const { eyebrow, title, lead, banner, position = '70% 50%' } = Astro.props;
 const b = BANNERS[banner];
 ---
 <section class="phero">
-  <img class="photo" src={b.src} srcset={b.srcset} sizes="100vw" width={b.width} height={b.height} alt={b.alt} style={`object-position:${position}`} fetchpriority="high" />
-  <div class="shade"></div>
-  <div class="container in rise">
-    {eyebrow && <p class="chip">{eyebrow}</p>}
-    <h1>{title}</h1>
-    {lead && <p class="lead">{lead}</p>}
-    <div class="cta"><slot /></div>
+  <div class="container grid">
+    <div class="in rise">
+      {eyebrow && <p class="k-label">{eyebrow}</p>}
+      <h1>{title}</h1>
+      {lead && <p class="lead">{lead}</p>}
+      <div class="cta"><slot /></div>
+    </div>
+    <figure class="frame"><img src={b.src} srcset={b.srcset} sizes="(max-width: 860px) 100vw, 55vw" width={b.width} height={b.height} alt={b.alt} style={`object-position:${position}`} fetchpriority="high" /></figure>
   </div>
 </section>
 
 <style>
-  .phero { position: relative; display: flex; align-items: flex-end; overflow: hidden; min-height: clamp(380px, 52svh, 540px); background: var(--ink); }
-  .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-  .shade { position: absolute; inset: 0; pointer-events: none; background:
-    linear-gradient(to bottom, rgb(20 20 20 / .7) 0, rgb(20 20 20 / .15) 120px, transparent 220px),
-    linear-gradient(to right, rgb(20 20 20 / .85) 0, rgb(20 20 20 / .5) 38%, transparent 70%),
-    linear-gradient(to top, rgb(20 20 20 / .6), transparent 45%); }
-  .in { position: relative; z-index: 2; padding-top: 7rem; padding-bottom: clamp(2.2rem, 5vw, 4rem); }
-  .chip { margin-bottom: .9rem; background: none; padding: 0; font-size: 1.05rem; letter-spacing: .22em; color: #cfe9d8; }
-  h1 { font-size: clamp(3.4rem, 8vw, 6.2rem); line-height: .92; letter-spacing: .01em; text-shadow: 0 4px 24px rgb(0 0 0 / .45); }
-  .lead { margin: 1rem 0 0; max-width: 34rem; font-size: 1.08rem; line-height: 1.5; color: #ececec; }
-  .cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; }
+  .phero { background: var(--cream); color: var(--body-ink); padding: clamp(32px, 5vw, 64px) 0 clamp(28px, 4vw, 48px); }
+  .grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(1.5rem, 5vw, 4rem); align-items: center; padding-bottom: clamp(28px, 4vw, 48px); border-bottom: 1px solid var(--rule); }
+  h1 { font-size: clamp(3rem, 6vw, 5rem); line-height: 1; }
+  .lead { margin: 1rem 0 0; max-width: 30rem; font-size: 1.08rem; line-height: 1.55; color: var(--muted); }
+  .cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.4rem; }
   .cta:empty { display: none; }
-  @media (max-width: 760px) {
-    .shade { background:
-      linear-gradient(to bottom, rgb(20 20 20 / .7) 0, rgb(20 20 20 / .1) 120px, transparent 200px),
-      linear-gradient(to top, rgb(20 20 20 / .92) 0, rgb(20 20 20 / .6) 45%, rgb(20 20 20 / .1) 80%); }
-    .phero { min-height: 520px; }
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .photo { animation: settle 1.8s cubic-bezier(.2, .6, .2, 1) both; }
-    @keyframes settle { from { transform: scale(1.06); } to { transform: none; } }
-  }
+  .frame { margin: 0; border-radius: 6px; overflow: hidden; background: #ddd; }
+  .frame img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } .frame { order: -1; } }
 </style>

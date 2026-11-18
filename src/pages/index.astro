@@ -28,18 +28,17 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
 ---
 <Site title="Kitchen 121 | Fresh begins here" active="home">
   <section class="hero" aria-label="Welcome">
-    <img class="photo" src={hero.src} srcset={hero.srcset} sizes="100vw" width={hero.width} height={hero.height} alt={hero.alt} fetchpriority="high" />
-    <div class="shade"></div>
-    <div class="container content">
+    <div class="container grid">
       <div class="copy rise">
-        <p class="chip">Since 2017 &middot; Duluth &amp; Hamilton Mill</p>
+        <p class="k-label">Since 2017 &middot; Duluth &amp; Hamilton Mill</p>
         <h1 class="script"><span class="sr-only">Fresh Begins Here!</span><Fresh aria-hidden="true" /></h1>
         <p class="lead">Signature chicken, sushi rolls and bowls by Chef Ji Young Lee.</p>
         <div class="cta">
           <a class="pill" href={u('locations/')} data-order><span>Order Now</span><span class="arrow">&rarr;</span></a>
-          <a class="pill pill--ghost" href={u('menu/')}>See the Menu</a>
+          <a class="pill pill--ink" href={u('menu/')}>See the Menu</a>
         </div>
       </div>
+      <figure class="frame"><img src={hero.src} srcset={hero.srcset} sizes="(max-width: 860px) 100vw, 60vw" width={hero.width} height={hero.height} alt={hero.alt} fetchpriority="high" /></figure>
     </div>
   </section>
 
@@ -121,36 +120,20 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
 </Site>
 
 <style>
-  /* ---------- hero: copy on the left, a tilted wall of real dishes on the right ---------- */
-  .hero { position: relative; display: flex; align-items: center; overflow: hidden; min-height: min(92svh, 860px); background: var(--ink); }
-  .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 75% 50%; display: block; }
-  @media (prefers-reduced-motion: no-preference) { .photo { animation: settle 1.8s cubic-bezier(.2, .6, .2, 1) both; } @keyframes settle { from { transform: scale(1.06); } to { transform: none; } } }
-  .shade { position: absolute; inset: 0; pointer-events: none; background:
-    linear-gradient(to bottom, rgb(20 20 20 / .75) 0, rgb(20 20 20 / .2) 120px, transparent 220px),
-    linear-gradient(to right, rgb(20 20 20 / .9) 0, rgb(20 20 20 / .6) 34%, rgb(20 20 20 / .1) 62%, transparent 80%); }
-  .content { position: relative; z-index: 2; padding-block: 7rem 4rem; }
-  .copy { max-width: 40rem; }
-  h1 { margin: 1.1rem 0 1.5rem; font-size: clamp(3.4rem, 7.6vw, 6.8rem); line-height: .9; letter-spacing: .005em; }
-  h1.script { margin: 1.2rem 0 1.6rem; width: min(100%, 34rem); line-height: 0; color: #fff; filter: drop-shadow(0 6px 22px rgb(0 0 0 / .45)); }
+  /* ---------- hero: lettering on the left, the photo in an inset frame on the right ---------- */
+  .hero { background: var(--cream); color: var(--body-ink); padding: clamp(28px, 4vw, 56px) 0 0; }
+  .hero .grid { display: grid; grid-template-columns: 4fr 7fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; }
+  h1.script { margin: .6rem 0 1.2rem; width: min(100%, 26rem); line-height: 0; color: var(--body-ink); }
   h1.script svg { display: block; width: 100%; height: auto; }
   .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-  h1 .l { display: block; }
-  h1 .block { margin-top: .14em; }
-  h1 .block span { display: inline-block; white-space: nowrap; padding: .08em .24em .03em; margin-left: -.06em; background: var(--green); transform: rotate(-3deg); transform-origin: left center; box-shadow: 0 14px 40px rgb(0 0 0 / .35); }
-  .lead { margin: 0 0 1.9rem; max-width: 28rem; font-size: 1.15rem; line-height: 1.5; color: #e2e2e2; }
-  .cta { display: flex; flex-wrap: wrap; gap: .9rem; }
+  .lead { margin: 0 0 1.5rem; max-width: 24rem; font-size: 1.1rem; line-height: 1.5; color: var(--muted); }
+  .cta { display: flex; flex-wrap: wrap; gap: .8rem; }
+  .frame { margin: 0; border-radius: 6px; overflow: hidden; background: #ddd; }
+  .frame img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: 70% 55%; }
   @media (max-width: 860px) {
-    .hero { align-items: flex-end; min-height: 100svh; }
-    .photo { object-position: 78% 50%; }
-    .shade { background:
-      linear-gradient(to bottom, rgb(20 20 20 / .8) 0, rgb(20 20 20 / .15) 110px, transparent 200px),
-      linear-gradient(to top, rgb(20 20 20 / .95) 0, rgb(20 20 20 / .75) 40%, rgb(20 20 20 / .15) 75%); }
-    .content { padding-block: 0 3rem; }
-    .copy { margin-inline: auto; text-align: center; }
-    h1 .block span { transform-origin: center; }
-    h1.script { width: min(88%, 22rem); margin-inline: auto; }
-    .lead { margin-inline: auto; }
-    .cta { justify-content: center; }
+    .hero .grid { grid-template-columns: 1fr; }
+    .frame { order: -1; } .frame img { aspect-ratio: 4 / 3; }
+    .copy { text-align: center; } h1.script { margin-inline: auto; width: min(80%, 20rem); } .lead { margin-inline: auto; } .cta { justify-content: center; }
   }
 
   /* ---------- shared: cream paper, thin rules ---------- */

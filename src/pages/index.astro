@@ -23,6 +23,13 @@ const dishes = [
   { img: roll, name: '121 Rolls', note: 'The 121 special rolls, rainbow, caterpillar, spicy tuna and more.', price: from(['roll']) },
   { img: bowl, name: 'Bowls & Salads', note: 'Hot bowls, sushi and poke bowls, house salads.', price: from(['hot-bowl', 'sushi-bowl', 'salad-bowl', 'cool-salad']) },
 ];
+const five = [
+  { img: red, name: 'Red Pepper Chicken', note: '121 Signature Chicken', price: 17 },
+  { img: soy, name: 'Oriental Soy Garlic', note: '121 Signature Chicken', price: 17 },
+  { img: roll, name: '121 Rolls', note: 'Special and classic rolls', price: from(['roll']) },
+  { img: bowl, name: 'Hot Bowls', note: 'Over seasoned rice, sunny side up', price: from(['hot-bowl']) },
+  { img: salad, name: 'Crunch Chicken Salad', note: 'House salads and poke', price: from(['cool-salad', 'salad-bowl']) },
+];
 const insta = [soy, roll, spread, red, bowl, salad];
 const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.height });
 ---
@@ -50,15 +57,13 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
   <section class="dishes">
     <div class="container">
       <header class="sh"><h2>Signature dishes</h2><a class="tl" href={u('menu/')}>Full menu &rarr;</a></header>
-      <div class="d3">
-        {dishes.map((d) => (
-          <article>
-            <a href={u('menu/')} class="dimg"><img {...Img(d.img)} alt={d.name} loading="lazy" /></a>
-            <div class="dr"><h3>{d.name}</h3><b>from ${d.price}</b></div>
-            <p>{d.note}</p>
-          </article>
-        ))}
+      <div class="f2">
+        <a class="big" href={u('menu/')}><img {...Img(dishes[0].img)} alt={dishes[0].name} loading="lazy" /><div class="cap"><span class="from">From ${dishes[0].price}</span><h3>{dishes[0].name}</h3><p>{dishes[0].note}</p></div></a>
+        {dishes.slice(1).map((d) => (<a class="sm" href={u('menu/')}><img {...Img(d.img)} alt={d.name} loading="lazy" /><div class="cap"><h3>{d.name}</h3><span>from ${d.price}</span></div></a>))}
       </div>
+    </div>
+    <div class="rail" aria-label="Signature dishes">
+      {five.map((d) => (<a class="card" href={u('menu/')}><img {...Img(d.img)} alt={d.name} loading="lazy" /><div class="ov"><span>{d.note}</span><h3>{d.name}</h3><b>${d.price}</b></div></a>))}
     </div>
   </section>
 
@@ -180,15 +185,30 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
   .ph img { aspect-ratio: 4 / 3; }
 
   .dishes { padding: 0 0 clamp(48px, 7vw, 80px); }
-  .d3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 36px); }
-  .dimg { display: block; border-radius: 4px; overflow: hidden; }
-  .dimg img { aspect-ratio: 4 / 3; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
-  .dimg:hover img { transform: scale(1.04); }
-  .dr { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-top: 1rem; padding-bottom: .5rem; border-bottom: 1px solid var(--rule); }
-  .dr h3 { font-size: 1.7rem; }
-  .dr b { font-family: var(--display); font-weight: 700; font-size: 1.25rem; color: var(--green); white-space: nowrap; }
-  .d3 p { margin: .6rem 0 0; font-size: .98rem; line-height: 1.55; color: #5d564c; }
-
+  /* Desktop: one large feature photo + two smaller. Phones: a swipeable row of five tall cards. */
+  .f2 { display: grid; grid-template-columns: 1.6fr 1fr; grid-template-rows: 1fr 1fr; gap: 14px; height: clamp(420px, 42vw, 600px); }
+  .f2 a { position: relative; display: block; overflow: hidden; border-radius: 6px; color: #fff; text-decoration: none; }
+  .f2 img { height: 100%; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+  .f2 a:hover img { transform: scale(1.04); }
+  .big { grid-row: span 2; }
+  .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.6rem; background: linear-gradient(to top, rgb(18 17 15 / .75), transparent); }
+  .big .cap h3 { font-size: clamp(2rem, 3vw, 2.8rem); }
+  .big .cap p { margin: .4rem 0 0; max-width: 26rem; color: rgb(255 255 255 / .85); }
+  .from { font-family: var(--display); font-weight: 700; font-size: .95rem; letter-spacing: .2em; text-transform: uppercase; color: #cfe9d8; }
+  .sm .cap { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 1.1rem 1.2rem; }
+  .sm .cap h3 { font-size: 1.6rem; } .sm .cap span { font-weight: 600; white-space: nowrap; }
+  .rail { display: none; }
+  @media (max-width: 860px) {
+    .f2 { display: none; }
+    .rail { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 1.25rem 6px; scroll-padding-inline: 1.25rem; scrollbar-width: none; }
+    .rail::-webkit-scrollbar { display: none; }
+    .card { position: relative; flex: none; width: 72vw; max-width: 300px; aspect-ratio: 3 / 4; border-radius: 6px; overflow: hidden; scroll-snap-align: start; color: #fff; text-decoration: none; }
+    .card img { height: 100%; }
+    .ov { position: absolute; inset: auto 0 0 0; padding: 1.1rem; background: linear-gradient(to top, rgb(18 17 15 / .8), transparent); }
+    .ov span { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: rgb(255 255 255 / .8); }
+    .ov h3 { margin-top: .2rem; font-size: 1.5rem; }
+    .ov b { display: block; margin-top: .3rem; font-family: var(--display); font-size: 1.15rem; color: #cfe9d8; }
+  }
   .reviews { padding: clamp(56px, 8vw, 100px) 0; border-bottom: 1px solid var(--rule); }
   .rg { display: grid; grid-template-columns: 1fr 3fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
   .r3 { display: grid; grid-template-columns: repeat(3, 1fr); }
@@ -216,7 +236,7 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
   @media (max-width: 900px) {
     .chef .grid, .rg, .v2 { grid-template-columns: 1fr; }
     .ph { order: -1; max-width: 26rem; }
-    .d3, .r3 { grid-template-columns: 1fr; }
+    .r3 { grid-template-columns: 1fr; }
     .r3 blockquote { border-left: 0; border-top: 1px solid var(--rule); padding: 1.2rem 0; }
     .ig { grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .statement .container::before, .statement .container::after { display: none; }

@@ -4,10 +4,9 @@
 // video and table-spread photo). Reviews are empty slots until the owner supplies real ones.
 import Site from '../layouts/Site.astro';
 import Fresh from '../assets/fresh-begins-here.svg';
-import { u, LOCATIONS, HOURS, INSTAGRAM, INSTAGRAM_HANDLE, directions } from '../data/site';
+import { u, LOCATIONS, HOURS, INSTAGRAM, INSTAGRAM_HANDLE, directions, address } from '../data/site';
 import { MENUS } from '../data/menu';
 import { BANNERS } from '../data/banners';
-import { STOREFRONTS } from '../data/storefronts';
 import { REVIEWS } from '../data/reviews';
 import roll from '../assets/home/roll.webp';
 import red from '../assets/home/red-pepper.webp';
@@ -69,17 +68,18 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
   </section>
 
   <section class="chef">
-    <figure class="ph"><img {...Img(soy)} alt="Soy garlic fried chicken topped with crispy noodles and scallion" loading="lazy" /></figure>
-    <div class="txt">
-      <p class="label">Chef-crafted kitchen</p>
-      <h2>Chef-crafted, since 2017</h2>
-      <p class="body">Every plate at Kitchen 121 is made by hand by Chef Ji Young Lee and the kitchen team, from the hand-made sauces on our chicken to the rolls made to order.</p>
-      <ul class="feats">
-        <li><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M13 3h6v5l3 4v15a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V12l3-4z M10 17h12"/></svg><div><b>House-made sauces</b><span>Soy garlic, red pepper, sweet onion and more, made in our kitchen.</span></div></li>
-        <li><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="17" r="11"/><path d="M16 10v7l5 3 M12 3h8"/></svg><div><b>Made to order</b><span>Chicken fried and rolls rolled when you order.</span></div></li>
-        <li><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 29s-9-8-9-15a9 9 0 0 1 18 0c0 7-9 15-9 15z"/><circle cx="16" cy="14" r="3.2"/></svg><div><b>Two kitchens</b><span>Duluth since 2017, and now Hamilton Mill.</span></div></li>
-      </ul>
-      <p class="cred">Le Cordon Bleu trained &middot; formerly The Ritz-Carlton, Atlanta &middot; owner chef since 2017</p>
+    <div class="container grid">
+      <div class="txt">
+        <p class="label">Chef-crafted kitchen</p>
+        <h2>Chef-crafted, since 2017</h2>
+        <p class="body">Every plate at Kitchen 121 is made by hand by Chef Ji Young Lee and the kitchen team, from the hand-made sauces on our chicken to the rolls made to order. Le Cordon Bleu trained, and formerly of The Ritz-Carlton, Atlanta.</p>
+        <ul class="feats">
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M13 3h6v5l3 4v15a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V12l3-4z M10 17h12"/></svg><b>House-made sauces</b></li>
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="17" r="11"/><path d="M16 10v7l5 3 M12 3h8"/></svg><b>Made to order</b></li>
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 29s-9-8-9-15a9 9 0 0 1 18 0c0 7-9 15-9 15z"/><circle cx="16" cy="14" r="3.2"/></svg><b>Two kitchens</b></li>
+        </ul>
+      </div>
+      <figure class="ph"><img {...Img(soy)} alt="Soy garlic fried chicken topped with crispy noodles and scallion" loading="lazy" /></figure>
     </div>
   </section>
 
@@ -101,21 +101,34 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
   <section class="visit" id="kitchens">
     <div class="container">
       <header class="sh"><h2>Visit us</h2><span class="hrs">{HOURS[1].days} {HOURS[1].time} &middot; {HOURS[0].days} {HOURS[0].time.toLowerCase()}</span></header>
-      <div class="v2">
-        {LOCATIONS.map((l) => (
-          <article>
-            <img {...Img(STOREFRONTS[l.id].img)} alt={STOREFRONTS[l.id].alt} style={`object-position:${STOREFRONTS[l.id].position}`} loading="lazy" />
-            <div class="vb">
-              <h3>{l.short}</h3>
-              <p>{l.street}<br />{l.city}</p>
-              <p class="tel"><a href={`tel:${l.tel}`}>{l.phone}</a></p>
-              <div class="acts"><a class="pill pill--sm" href={l.order.clover} data-order={l.id}>Order</a><a class="tl" href={l.menu}>Menu</a><a class="tl" href={directions(l)} rel="noopener">Directions</a></div>
-            </div>
-          </article>
-        ))}
+      <div class="ml">
+        <div class="map"><iframe id="visit-map" src={`https://www.google.com/maps?q=${encodeURIComponent(`Kitchen 121 ${address(LOCATIONS[0])}`)}&output=embed`} title={`Map showing ${LOCATIONS[0].name}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
+        <div class="list">
+          {LOCATIONS.map((l, i) => (
+            <article class:list={[i === 0 && 'on']} data-map={`https://www.google.com/maps?q=${encodeURIComponent(`Kitchen 121 ${address(l)}`)}&output=embed`} data-title={`Map showing ${l.name}`}>
+              <button class="num" type="button" aria-label={`Show ${l.short} on the map`}>{i + 1}</button>
+              <div>
+                <h3><button type="button" class="nm">{l.short}</button></h3>
+                <p>{l.street}, {l.city}<br /><a href={`tel:${l.tel}`}>{l.phone}</a></p>
+                <div class="acts"><a class="pill pill--sm" href={l.order.clover} data-order={l.id}>Order</a><a class="tl" href={l.menu}>Menu</a><a class="tl" href={directions(l)} rel="noopener">Directions</a></div>
+              </div>
+            </article>
+          ))}
+          <p class="mhint">Tap a kitchen to see it on the map.</p>
+        </div>
       </div>
     </div>
   </section>
+  <script>
+    const map = document.getElementById('visit-map') as HTMLIFrameElement | null;
+    document.querySelectorAll<HTMLElement>('.visit [data-map]').forEach((el) => {
+      el.querySelectorAll('.num, .nm').forEach((btn) => btn.addEventListener('click', () => {
+        if (!map) return;
+        map.src = el.dataset.map!; map.title = el.dataset.title!;
+        document.querySelectorAll('.visit [data-map]').forEach((x) => x.classList.toggle('on', x === el));
+      }));
+    });
+  </script>
 
   <section class="insta">
     <div class="container">
@@ -174,21 +187,16 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
   .statement span { color: var(--green); font-weight: 600; }
 
 
-  /* Chef-crafted: the photo fills the left half edge to edge, text on the right. */
-  .chef { display: grid; grid-template-columns: 1fr 1fr; min-height: 540px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-  .ph { margin: 0; } .ph img { height: 100%; }
-  .chef .txt { align-self: center; max-width: 40rem; padding: clamp(40px, 6vw, 80px) clamp(24px, 6vw, 88px); }
-  .chef h2 { font-size: clamp(2.4rem, 3.6vw, 3.2rem); }
-  .chef .body { margin: 1rem 0 0; font-size: 1.05rem; line-height: 1.65; color: #5d564c; }
-  .feats { list-style: none; margin: 1.6rem 0 0; padding: 0; }
-  .feats li { display: flex; gap: 1rem; align-items: flex-start; padding: .9rem 0; border-top: 1px solid var(--rule); }
-  .feats li div { display: grid; gap: .2rem; }
-  .feats svg { flex: none; width: 1.8rem; height: 1.8rem; fill: none; stroke: var(--green); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-  .feats b { font-family: var(--display); font-weight: 700; font-size: 1.1rem; letter-spacing: .08em; text-transform: uppercase; }
-  .feats span { font-size: .92rem; line-height: 1.5; color: #5d564c; }
-  .cred { margin: 1.4rem 0 0; font-size: .85rem; letter-spacing: .04em; color: #8a8070; }
-  @media (max-width: 860px) { .chef { grid-template-columns: 1fr; min-height: 0; } .ph img { aspect-ratio: 4 / 3; } }
-
+  .chef { padding: 0 0 clamp(56px, 8vw, 96px); }
+  .chef .grid { display: grid; grid-template-columns: 7fr 4fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; padding-top: clamp(28px, 4vw, 44px); border-top: 1px solid var(--rule); }
+  .chef h2 { font-size: clamp(2rem, 3.4vw, 2.8rem); }
+  .chef .body { margin: .7rem 0 0; font-size: 1rem; line-height: 1.6; color: #4a443c; max-width: 40rem; }
+  .feats { list-style: none; margin: 1.2rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem 1.8rem; }
+  .feats li { display: flex; align-items: center; gap: .5rem; }
+  .feats svg { width: 1.4rem; height: 1.4rem; fill: none; stroke: var(--green); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .feats b { font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: .06em; text-transform: uppercase; line-height: 1.1; }
+  .ph { margin: 0; border-radius: 4px; overflow: hidden; }
+  .ph img { aspect-ratio: 4 / 3; }
   .dishes { padding: 0 0 clamp(48px, 7vw, 80px); }
   /* Desktop: one large feature photo + two smaller. Phones: a swipeable row of five tall cards. */
   .f2 { display: grid; grid-template-columns: 1.6fr 1fr; grid-template-rows: 1fr 1fr; gap: 14px; height: clamp(420px, 42vw, 600px); }
@@ -233,12 +241,19 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
 
   .visit { padding: clamp(64px, 9vw, 120px) 0; }
   .hrs { font-size: 1rem; color: #5d564c; }
-  .v2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); }
-  .v2 article { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; align-items: center; }
-  .v2 img { aspect-ratio: 4 / 3; border-radius: 4px; height: 100%; }
-  .vb h3 { font-size: 2.3rem; }
-  .vb p { margin: .5rem 0 0; color: #4a443c; line-height: 1.5; }
-  .tel a { color: inherit; font-weight: 600; text-decoration: none; }
+  .ml { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(1.5rem, 3vw, 2.5rem); align-items: stretch; }
+  .map { min-height: 400px; border-radius: 6px; overflow: hidden; background: #e8e1d3; }
+  .map iframe { display: block; width: 100%; height: 100%; border: 0; }
+  .list article { display: flex; gap: 1.2rem; padding: 1.4rem 0; border-top: 1px solid var(--rule); }
+  .list article:last-of-type { border-bottom: 1px solid var(--rule); }
+  .num { flex: none; width: 2.4rem; height: 2.4rem; display: grid; place-items: center; border-radius: 50%; border: 0; background: #cfc6b4; color: #fff; font-weight: 700; font-size: 1rem; cursor: pointer; transition: background-color .2s; }
+  .list article.on .num { background: var(--green); }
+  .nm { padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; text-align: left; }
+  .nm:hover { color: var(--green); }
+  .list h3 { font-size: 2.1rem; }
+  .list p { margin: .4rem 0 0; color: #5d564c; line-height: 1.5; }
+  .list p a { color: inherit; font-weight: 600; text-decoration: none; }
+  .mhint { margin: .9rem 0 0; font-size: .85rem; color: #8a8070; }
   .acts { display: flex; flex-wrap: wrap; align-items: center; gap: 1.1rem; margin-top: 1.2rem; }
 
   .insta { padding: 0 0 clamp(64px, 9vw, 120px); }
@@ -248,9 +263,11 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
   .ig a:hover img { transform: scale(1.06); }
 
   @media (max-width: 900px) {
-    .v2 { grid-template-columns: 1fr; }
+    .chef .grid, .ml { grid-template-columns: 1fr; }
+    .ph { order: -1; max-width: 26rem; }
+    .map { min-height: 280px; }
     .ig { grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .statement .container::before, .statement .container::after { display: none; }
   }
-  @media (max-width: 520px) { .v2 article { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .feats { gap: .6rem 1.2rem; } }
 </style>

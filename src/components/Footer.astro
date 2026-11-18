@@ -1,52 +1,60 @@
 ---
-// Footer: brand, both locations, hours and contact. All details are from the client's current site.
-import logo from '../assets/logo-light.webp';
-import { u, LOCATIONS, HOURS, EMAIL, INSTAGRAM, INSTAGRAM_HANDLE, TAGLINE, SISTER, directions } from '../data/site';
+// Footer: deep green, four columns (brand, both kitchens, hours, links + social). Details are from src/data/site.ts.
+import logo from '../assets/logo-dark.webp';
+import { u, LOCATIONS, HOURS, EMAIL, SOCIALS, SISTER, directions } from '../data/site';
+const nav = [['Menu', 'menu/'], ['Catering', 'catering/'], ['Locations', 'locations/']];
+const ICON: Record<string, string> = {
+  instagram: 'M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4z M12 8.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7z M17.3 6.7h.01',
+  facebook: 'M14 8h3V4h-3a4 4 0 0 0-4 4v2H7v4h3v6h4v-6h3l1-4h-4V8z',
+  tiktok: 'M14 3v11.5a3.5 3.5 0 1 1-3-3.46 M14 3c.5 2.5 2.4 4.3 5 4.5',
+};
 ---
 <footer class="foot">
-  <div class="in">
+  <div class="g">
     <div class="brand">
       <img src={logo.src} alt="Kitchen 121" width={logo.width} height={logo.height} loading="lazy" />
-      <p class="tag">{TAGLINE}</p>
-      <nav class="explore" aria-label="Footer">
-        <a href={u('menu/')}>Menu</a><a href={u('catering/')}>Catering</a><a href={u('locations/')}>Locations</a>
-      </nav>
-      <a class="sister" href={SISTER.url} rel="noopener">From the same family: {SISTER.name}&nbsp;&rarr;</a>
+      <p class="t">Chef-crafted Korean fried chicken, sushi and bowls. Since 2017.</p>
+      <a class="sis" href={SISTER.url} rel="noopener">From the same family: {SISTER.name} &rarr;</a>
     </div>
-    {LOCATIONS.map((l) => (
-      <div>
-        <h3>{l.short}</h3>
-        <p><a href={directions(l)} rel="noopener">{l.street}<br />{l.city}</a></p>
-        <p><a href={`tel:${l.tel}`}>{l.phone}</a></p>
-        <p><a class="go" href={l.order.clover} data-order={l.id}>Order now &rarr;</a></p>
-      </div>
-    ))}
+    <div>
+      <h3>Visit</h3>
+      {LOCATIONS.map((l) => (
+        <p><b>{l.short}</b><br /><a href={directions(l)} rel="noopener">{l.street}, {l.city}</a><br /><a href={`tel:${l.tel}`}>{l.phone}</a></p>
+      ))}
+    </div>
     <div>
       <h3>Hours</h3>
-      {HOURS.map((h) => <p>{h.days}<br /><b>{h.time}</b></p>)}
+      <p>{HOURS[1].days}<br /><b>{HOURS[1].time}</b></p>
+      <p>{HOURS[0].days}: {HOURS[0].time}</p>
       <p><a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
-      <p><a href={INSTAGRAM} rel="noopener">Instagram {INSTAGRAM_HANDLE}</a></p>
+    </div>
+    <div>
+      <h3>Explore</h3>
+      {nav.map(([t, h]) => <p><a href={u(h)}>{t}</a></p>)}
+      <p><a class="ord" href={u('locations/')} data-order>Order Now &rarr;</a></p>
+      <div class="soc">{SOCIALS.map((s) => <a href={s.url} rel="noopener" aria-label={`Kitchen 121 on ${s.name}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICON[s.id]} /></svg></a>)}</div>
     </div>
   </div>
-  <p class="credit">Since 2017, Kitchen 121 Duluth &amp; Hamilton Mill. &copy; {new Date().getFullYear()} Kitchen 121. All rights reserved. Developed and designed by Solace.</p>
+  <p class="credit">&copy; {new Date().getFullYear()} Kitchen 121. All rights reserved. Developed and designed by Solace.</p>
 </footer>
 
 <style>
-  .foot { background: var(--cream); color: var(--body-ink); border-top: 1px solid var(--rule); padding: clamp(44px, 6vw, 72px) clamp(20px, 5vw, 80px) 24px; }
-  .in { max-width: 74rem; margin: 0 auto; display: grid; grid-template-columns: 1.5fr repeat(3, 1fr); gap: 32px; }
-  .brand img { height: 2.8rem; width: auto; display: block; }
-  .tag { margin: .9rem 0 0; font-family: var(--display); font-weight: 700; font-size: .95rem; letter-spacing: .2em; text-transform: uppercase; color: var(--green); }
-  h3 { margin: 0 0 .7rem; font-size: 1.5rem; }
-  p { margin: 0 0 .5rem; font-size: .95rem; line-height: 1.55; color: var(--muted); }
-  p b { color: var(--body-ink); font-weight: 600; }
-  p a { color: inherit; text-decoration: none; }
-  p a:hover { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
-  .go { color: var(--green); font-weight: 600; }
-  .explore { display: flex; flex-wrap: wrap; gap: .3rem 1.4rem; margin-top: 1rem; }
-  .explore a { color: var(--body-ink); text-decoration: none; font-weight: 500; }
-  .explore a:hover { color: var(--green); }
-  .sister { display: inline-block; margin-top: 1rem; color: var(--muted); font-size: .9rem; text-decoration: underline; text-underline-offset: 3px; }
-  .credit { max-width: 74rem; margin: 2.2rem auto 0; padding-top: 1.1rem; border-top: 1px solid var(--rule); font-size: .75rem; color: #9b9283; text-align: center; }
-  @media (max-width: 900px) { .in { grid-template-columns: 1fr 1fr; } .brand { grid-column: 1 / -1; } }
-  @media (max-width: 520px) { .in { grid-template-columns: 1fr; gap: 24px; } }
+  .foot { background: #1f4a33; color: #f6f1e8; padding: clamp(48px, 6vw, 76px) clamp(20px, 5vw, 80px) 24px; }
+  .g { max-width: 74rem; margin: 0 auto; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2rem; }
+  .brand img { height: 3rem; width: auto; display: block; }
+  .t { margin-top: 1rem !important; max-width: 20rem; }
+  h3 { margin: 0 0 .7rem; font-size: 1.4rem; color: #f6f1e8; }
+  p { margin: 0 0 .6rem; font-size: .95rem; line-height: 1.55; color: rgb(246 241 232 / .75); }
+  b { color: #f6f1e8; font-weight: 600; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+  .sis { display: inline-block; margin-top: .4rem; font-size: .88rem; color: rgb(246 241 232 / .8); text-decoration: underline; text-underline-offset: 3px; }
+  .ord { color: #b9dcc6; font-weight: 600; }
+  .soc { display: flex; gap: .5rem; margin-top: .9rem; }
+  .soc a { width: 2.4rem; height: 2.4rem; display: grid; place-items: center; border: 1px solid rgb(246 241 232 / .3); border-radius: 50%; color: #f6f1e8; }
+  .soc a:hover { background: #f6f1e8; color: #1f4a33; text-decoration: none; }
+  .soc svg { width: 1.2rem; height: 1.2rem; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .credit { max-width: 74rem; margin: 2.4rem auto 0; padding-top: 1.1rem; border-top: 1px solid rgb(246 241 232 / .2); font-size: .75rem; color: rgb(246 241 232 / .55); text-align: center; }
+  @media (max-width: 900px) { .g { grid-template-columns: 1fr 1fr; } .brand { grid-column: 1 / -1; } }
+  @media (max-width: 520px) { .g { grid-template-columns: 1fr; gap: 1.6rem; } }
 </style>

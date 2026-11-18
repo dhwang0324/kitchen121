@@ -11,6 +11,11 @@ export const HOURS = [
 export const EMAIL = '121jiyoung@gmail.com';
 export const INSTAGRAM = 'https://www.instagram.com/121onetwentyone/';
 export const INSTAGRAM_HANDLE = '@121onetwentyone';
+// Social accounts shown in the home page "Follow along" section. Only Instagram has been confirmed;
+// add Facebook / TikTok here (with their real links) when the owner supplies them.
+export const SOCIALS: { id: 'instagram' | 'facebook' | 'tiktok'; name: string; url: string }[] = [
+  { id: 'instagram', name: 'Instagram', url: INSTAGRAM },
+];
 export const SISTER = { name: 'Chicken 121', url: 'https://chicken121.com' };
 
 export type LocId = 'duluth' | 'hamilton-mill';

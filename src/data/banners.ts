@@ -13,7 +13,7 @@ import locations2 from '../assets/banners/locations-2400.webp';
 export type BannerId = 'home' | 'menu' | 'catering' | 'locations';
 const set = (a: ImageMetadata, b: ImageMetadata, alt: string) => ({ src: b.src, srcset: `${a.src} ${a.width}w, ${b.src} ${b.width}w`, width: b.width, height: b.height, alt });
 export const BANNERS: Record<BannerId, ReturnType<typeof set>> = {
-  home: set(home1, home2, 'A crunch roll with orange roe, crunch chicken salad, red pepper and soy garlic chicken, a bulgogi salad bowl, pickled sides, dipping sauces and iced drinks on a long wooden table at Kitchen 121'),
+  home: set(home1, home2, 'A crunch sushi roll with orange roe in front of crunch chicken salad, red pepper and soy garlic chicken, a bulgogi bowl, pickled sides and iced drinks on a long wooden table at Kitchen 121'),
   menu: set(menu1, menu2, 'A spread of fried chicken in several flavors, sushi rolls, a bulgogi rice bowl and stir fried udon'),
   catering: set(catering1, catering2, 'A catering tray of fried chicken in six flavors beside trays of sushi rolls and takeout boxes'),
   locations: set(locations1, locations2, 'Illustrative restaurant interior with a poke bowl and fried chicken on a wooden table'),

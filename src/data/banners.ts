@@ -1,6 +1,7 @@
 // Wide banner images, all the restaurant's own: Home is their photo (DSC02275) widened and relit with Higgsfield,
 // food unchanged. Menu: their table-spread photo. Catering: a frame from their food video. Locations: their
-// dining-room photo (DSC02348) re-shot from a slightly lower angle with Higgsfield so the whole wall sign shows.
+// dining-room photo (DSC02348) recomposed wide with Higgsfield so the whole wall sign and the food fit the
+// short banner (sides extended, then upscaled; extra-wide file so phones' narrow crop stays sharp).
 // All four are graded to the same brightness, contrast, saturation and warmth.
 import home1 from '../assets/banners/home-1280.webp';
 import home2 from '../assets/banners/home-2400.webp';
@@ -9,7 +10,7 @@ import menu2 from '../assets/banners/menu-2400.webp';
 import catering1 from '../assets/banners/catering-1280.webp';
 import catering2 from '../assets/banners/catering-2400.webp';
 import locations1 from '../assets/banners/locations-1280.webp';
-import locations2 from '../assets/banners/locations-2400.webp';
+import locations2 from '../assets/banners/locations-3800.webp';
 
 export type BannerId = 'home' | 'menu' | 'catering' | 'locations';
 const set = (a: ImageMetadata, b: ImageMetadata, alt: string) => ({ src: b.src, srcset: `${a.src} ${a.width}w, ${b.src} ${b.width}w`, width: b.width, height: b.height, alt });

@@ -7,7 +7,7 @@ const { eyebrow, title, lead, banner, position = '70% 50%' } = Astro.props;
 const b = BANNERS[banner];
 ---
 <section class="phero">
-  <img class="photo" src={b.src} srcset={b.srcset} sizes="100vw" width={b.width} height={b.height} alt={b.alt} style={`object-position:${position}`} fetchpriority="high" />
+  <img class="photo" src={b.src} srcset={b.srcset} sizes="(max-width: 860px) 300vw, 100vw" width={b.width} height={b.height} alt={b.alt} style={`object-position:${position}`} fetchpriority="high" />
   <div class="shade"></div>
   <div class="container in rise">
     {eyebrow && <p class="hl">{eyebrow}</p>}

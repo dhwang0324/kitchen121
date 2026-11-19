@@ -2,11 +2,11 @@
 // Header for the inner pages: a full-width photo banner like the home page, with the same calm text treatment
 // (small label, title and lead tucked bottom-left on desktop; centered with a soft even dim on phones).
 import { BANNERS, type BannerId } from '../data/banners';
-interface Props { eyebrow?: string; title: string; lead?: string; banner: BannerId; position?: string; tall?: boolean }
-const { eyebrow, title, lead, banner, position = '70% 50%', tall = false } = Astro.props;
+interface Props { eyebrow?: string; title: string; lead?: string; banner: BannerId; position?: string }
+const { eyebrow, title, lead, banner, position = '70% 50%' } = Astro.props;
 const b = BANNERS[banner];
 ---
-<section class:list={["phero", { tall }]}>
+<section class="phero">
   <img class="photo" src={b.src} srcset={b.srcset} sizes="100vw" width={b.width} height={b.height} alt={b.alt} style={`object-position:${position}`} fetchpriority="high" />
   <div class="shade"></div>
   <div class="container in rise">
@@ -19,8 +19,6 @@ const b = BANNERS[banner];
 
 <style>
   .phero { position: relative; display: flex; align-items: flex-end; overflow: hidden; min-height: clamp(380px, 56svh, 560px); background: #1b1a18; color: #fff; }
-  /* tall: close to the photo's own shape, so a banner can show the whole scene (Locations: wall sign + food). */
-  .phero.tall { min-height: min(54vw, 88svh); }
   .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
   .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to top right, rgb(18 17 15 / .8) 0, rgb(18 17 15 / .4) 45%, transparent 72%); }
   .in { position: relative; z-index: 2; display: grid; gap: .9rem; padding-block: 5rem clamp(2.2rem, 5vw, 3.6rem); }
@@ -31,7 +29,7 @@ const b = BANNERS[banner];
   .cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: .4rem; }
   .cta:empty { display: none; }
   @media (max-width: 860px) {
-    .phero, .phero.tall { align-items: center; min-height: 64svh; }
+    .phero { align-items: center; min-height: 64svh; }
     .shade { background: radial-gradient(ellipse at 50% 50%, rgb(18 17 15 / .58) 0, rgb(18 17 15 / .5) 45%, rgb(18 17 15 / .62) 85%); }
     .in { justify-items: center; text-align: center; padding-block: 5.5rem 3rem; }
     .lead { padding-top: 1rem; border-top: 1px solid rgb(255 255 255 / .35); }

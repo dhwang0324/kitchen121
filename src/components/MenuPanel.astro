@@ -11,11 +11,12 @@ import bulgogiSalad from '../assets/home/bulgogi-salad-overhead.webp';
 import rollMenu from '../assets/home/roll-menu.webp';
 import rollMenuPhone from '../assets/home/roll-menu-phone.webp';
 import crunchChicken from '../assets/home/crunch-fried-chicken.webp';
+import jalapenoChicken from '../assets/home/jalapeno-parmesan-chicken.webp';
 interface Props { section: Section; prefix: string }
 const { section: s, prefix } = Astro.props;
 // phone: an optional different photo for phone-width screens (same strip slot).
 const REAL: Record<string, { img: ImageMetadata; cap: string; phone?: ImageMetadata }[]> = {
-  'signature-chicken': [{ img: red, cap: 'Red Pepper Chicken' }, { img: soy, cap: 'Oriental Soy Garlic Chicken' }, { img: crunchChicken, cap: 'Crunch Fried Chicken' }],
+  'signature-chicken': [{ img: red, cap: 'Red Pepper Chicken' }, { img: soy, cap: 'Oriental Soy Garlic Chicken' }, { img: crunchChicken, cap: 'Crunch Fried Chicken' }, { img: jalapenoChicken, cap: 'Jalapeño Parmesan Chicken' }],
   'roll': [{ img: rollMenu, phone: rollMenuPhone, cap: 'Crunch roll with orange tobiko' }],
   'hot-bowl': [{ img: bowl, cap: 'Bulgogi bowl' }],
   'salad-bowl': [{ img: bulgogiSalad, cap: 'Grilled Bulgogi Salad' }],

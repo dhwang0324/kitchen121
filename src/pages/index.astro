@@ -4,7 +4,7 @@
 // video and table-spread photo). Reviews are empty slots until the owner supplies real ones.
 import Site from '../layouts/Site.astro';
 import Fresh from '../assets/fresh-begins-here.svg';
-import { u, LOCATIONS, HOURS, INSTAGRAM, INSTAGRAM_HANDLE, SOCIALS, directions, address } from '../data/site';
+import { u, LOCATIONS, HOURS, INSTAGRAM, INSTAGRAM_HANDLE, INSTAGRAM_FEED, SOCIALS, directions, address } from '../data/site';
 import { MENUS } from '../data/menu';
 import { BANNERS } from '../data/banners';
 import { REVIEWS } from '../data/reviews';
@@ -138,10 +138,37 @@ const Img = (i: ImageMetadata) => ({ src: i.src, width: i.width, height: i.heigh
   <section class="insta">
     <div class="container">
       <header class="sh" data-a><h2>Follow along</h2><div class="soc"><span class="handle">{INSTAGRAM_HANDLE}</span>{SOCIALS.map((x) => <a href={x.url} rel="noopener" aria-label={`Kitchen 121 on ${x.name}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICON[x.id]} /></svg></a>)}</div></header>
-      <div class="ig">{insta.map((i) => <a data-a href={INSTAGRAM} rel="noopener" aria-label={`See more photos from Kitchen 121 (${INSTAGRAM_HANDLE})`}><img {...Img(i)} alt="" loading="lazy" /></a>)}</div>
+      <div class="ig" id="ig" data-feed={INSTAGRAM_FEED || undefined}>{insta.map((i) => <a data-a href={INSTAGRAM} rel="noopener" aria-label={`See more photos from Kitchen 121 (${INSTAGRAM_HANDLE})`}><img {...Img(i)} alt="" loading="lazy" /></a>)}</div>
     </div>
   </section>
   <script>
+    // Follow along: when a live feed URL is set, swap the six built-in photos for the latest Instagram posts.
+    // Any failure (no network, bad URL, too few posts) leaves the built-in photos in place.
+    const ig = document.getElementById('ig');
+    const feed = ig?.dataset.feed;
+    if (ig && feed) {
+      type Size = { mediaUrl?: string };
+      type Post = { permalink?: string; mediaType?: string; mediaUrl?: string; thumbnailUrl?: string; prunedCaption?: string; caption?: string; sizes?: { medium?: Size; large?: Size } };
+      fetch(feed)
+        .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+        .then((data: { posts?: Post[] } | Post[]) => {
+          const posts = (Array.isArray(data) ? data : data.posts ?? [])
+            .map((p) => ({ href: p.permalink, src: p.sizes?.medium?.mediaUrl || p.sizes?.large?.mediaUrl || (p.mediaType === 'VIDEO' ? p.thumbnailUrl : p.mediaUrl), text: (p.prunedCaption || p.caption || '').trim() }))
+            .filter((p) => p.href && p.src);
+          const tiles = Array.from(ig.querySelectorAll<HTMLAnchorElement>('a'));
+          if (posts.length < tiles.length) return;
+          tiles.forEach((a, i) => {
+            const p = posts[i], img = a.querySelector('img');
+            if (!img) return;
+            a.href = p.href!;
+            a.setAttribute('aria-label', p.text ? `Instagram post: ${p.text.slice(0, 90)}` : 'Kitchen 121 Instagram post');
+            img.removeAttribute('srcset');
+            img.src = p.src!;
+          });
+        })
+        .catch(() => {});
+    }
+
     // Hero: the photo drifts a little slower than the page and the text fades as you scroll away (skipped with reduced motion).
     const photo = document.getElementById('hero-photo');
     const copy = document.querySelector<HTMLElement>('.hero .copy');

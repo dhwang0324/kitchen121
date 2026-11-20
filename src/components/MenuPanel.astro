@@ -10,17 +10,16 @@ import table from '../assets/home/table.webp';
 import bulgogiSalad from '../assets/home/bulgogi-salad-overhead.webp';
 import rollMenu from '../assets/home/roll-menu.webp';
 import rollMenuPhone from '../assets/home/roll-menu-phone.webp';
-import crunchSalad from '../assets/home/crunch-chicken-salad.webp';
-import crunchSaladPhone from '../assets/home/crunch-chicken-salad-phone.webp';
+import crunchChicken from '../assets/home/crunch-fried-chicken.webp';
+import crunchChickenPhone from '../assets/home/crunch-fried-chicken-phone.webp';
 interface Props { section: Section; prefix: string }
 const { section: s, prefix } = Astro.props;
 // phone: an optional different photo for phone-width screens (same strip slot).
 const REAL: Record<string, { img: ImageMetadata; cap: string; phone?: ImageMetadata }[]> = {
-  'signature-chicken': [{ img: red, cap: 'Red Pepper Chicken' }, { img: soy, cap: 'Oriental Soy Garlic Chicken' }],
+  'signature-chicken': [{ img: red, cap: 'Red Pepper Chicken' }, { img: soy, cap: 'Oriental Soy Garlic Chicken' }, { img: crunchChicken, phone: crunchChickenPhone, cap: 'Crunch Fried Chicken' }],
   'roll': [{ img: rollMenu, phone: rollMenuPhone, cap: 'Crunch roll with orange tobiko' }],
   'hot-bowl': [{ img: bowl, cap: 'Bulgogi bowl' }],
   'salad-bowl': [{ img: bulgogiSalad, cap: 'Grilled Bulgogi Salad' }],
-  'cool-salad': [{ img: crunchSalad, phone: crunchSaladPhone, cap: 'Crunch Chicken Salad' }],
   'party-platter': [{ img: table, cap: 'A Kitchen 121 table spread' }],
 };
 const photos = REAL[s.id] ?? [];

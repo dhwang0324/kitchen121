@@ -10,11 +10,13 @@ import salad from '../assets/home/salad.webp';
 import table from '../assets/home/table.webp';
 import bulgogiSalad from '../assets/home/bulgogi-salad-overhead.webp';
 import rollMenu from '../assets/home/roll-menu.webp';
+import rollMenuPhone from '../assets/home/roll-menu-phone.webp';
 interface Props { section: Section; prefix: string }
 const { section: s, prefix } = Astro.props;
-const REAL: Record<string, { img: ImageMetadata; cap: string }[]> = {
+// phone: an optional different photo for phone-width screens (same strip slot).
+const REAL: Record<string, { img: ImageMetadata; cap: string; phone?: ImageMetadata }[]> = {
   'signature-chicken': [{ img: red, cap: 'Red Pepper Chicken' }, { img: soy, cap: 'Oriental Soy Garlic Chicken' }],
-  'roll': [{ img: rollMenu, cap: 'Crunch roll with orange tobiko' }],
+  'roll': [{ img: rollMenu, phone: rollMenuPhone, cap: 'Crunch roll with orange tobiko' }],
   'hot-bowl': [{ img: bowl, cap: 'Bulgogi bowl' }],
   'salad-bowl': [{ img: bulgogiSalad, cap: 'Grilled Bulgogi Salad' }],
   'cool-salad': [{ img: salad, cap: 'Crunch chicken salad' }],
@@ -29,7 +31,7 @@ const photos = REAL[s.id] ?? [];
   </header>
   {photos.length > 0 && (
     <div class="strip" data-n={photos.length}>
-      {photos.map((p) => <img src={p.img.src} alt={p.cap} title={p.cap} width={p.img.width} height={p.img.height} loading="lazy" />)}
+      {photos.map((p) => (<picture>{p.phone && <source media="(max-width: 760px)" srcset={p.phone.src} />}<img src={p.img.src} alt={p.cap} title={p.cap} width={p.img.width} height={p.img.height} loading="lazy" /></picture>))}
     </div>
   )}
   <ul class="list">
@@ -53,6 +55,7 @@ const photos = REAL[s.id] ?? [];
   .note { margin: 0; max-width: 34rem; font-size: .92rem; color: var(--muted); }
   .note b { color: var(--green); font-weight: 600; white-space: nowrap; }
   .strip { display: flex; gap: 10px; margin-top: 1.6rem; }
+  .strip picture { display: contents; }
   .strip img { flex: 1; min-width: 0; width: 0; height: clamp(120px, 18vw, 220px); object-fit: cover; border-radius: 4px; background: #eee; }
   .list { list-style: none; margin: 1.4rem 0 0; padding: 0; columns: 2; column-gap: clamp(2rem, 5vw, 4.5rem); }
   .list li { break-inside: avoid; padding: .8rem 0; border-bottom: 1px solid var(--rule); }

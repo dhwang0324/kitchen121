@@ -16,6 +16,7 @@ import table from '../assets/home/table.webp';
 import salad from '../assets/home/salad.webp';
 import spread from '../assets/home/spread.webp';
 import bulgogiSalad from '../assets/home/bulgogi-salad.webp';
+import bulgogiSaladClose from '../assets/home/bulgogi-salad-close.webp';
 const hero = BANNERS.home;
 const all = [...MENUS.duluth, ...MENUS['hamilton-mill']];
 const from = (ids: string[]) => Math.min(...all.filter((s) => ids.includes(s.id)).flatMap((s) => s.items.map((i) => i.p)));
@@ -29,7 +30,7 @@ const five = [
   { img: soy, name: 'Oriental Soy Garlic', note: '121 Signature Chicken', price: 17 },
   { img: roll, name: '121 Rolls', note: 'Special and classic rolls', price: from(['roll']) },
   { img: bowl, name: 'Hot Bowls', note: 'Over seasoned rice, sunny side up', price: from(['hot-bowl']) },
-  { img: bulgogiSalad, name: 'Grilled Bulgogi Salad', note: 'Salad bowls', price: 16 },
+  { img: bulgogiSaladClose, name: 'Grilled Bulgogi Salad', note: 'Salad bowls', price: 16 },
 ];
 const insta = [soy, roll, spread, red, bowl, salad];
 const ICON = {

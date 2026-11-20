@@ -11,6 +11,9 @@ export const HOURS = [
 export const EMAIL = '121jiyoung@gmail.com';
 export const INSTAGRAM = 'https://www.instagram.com/121onetwentyone/';
 export const INSTAGRAM_HANDLE = '@121onetwentyone';
+// Live Instagram feed for the home page "Follow along" grid. Paste the JSON feed URL from behold.so here
+// (e.g. 'https://feeds.behold.so/XXXXXXXX'). Empty = show the built-in photos instead.
+export const INSTAGRAM_FEED = '';
 // Social accounts shown in the home page "Follow along" section. Only Instagram has been confirmed;
 // add Facebook / TikTok here (with their real links) when the owner supplies them.
 export const SOCIALS: { id: 'instagram' | 'facebook' | 'tiktok'; name: string; url: string }[] = [

@@ -8,13 +8,14 @@ import roll from '../assets/home/roll.webp';
 import bowl from '../assets/home/bulgogi-bowl.webp';
 import salad from '../assets/home/salad.webp';
 import table from '../assets/home/table.webp';
+import bulgogiSalad from '../assets/home/bulgogi-salad-overhead.webp';
 interface Props { section: Section; prefix: string }
 const { section: s, prefix } = Astro.props;
 const REAL: Record<string, { img: ImageMetadata; cap: string }[]> = {
   'signature-chicken': [{ img: red, cap: 'Red Pepper Chicken' }, { img: soy, cap: 'Oriental Soy Garlic Chicken' }],
   'roll': [{ img: roll, cap: '121 roll with orange roe' }],
   'hot-bowl': [{ img: bowl, cap: 'Bulgogi bowl' }],
-  'salad-bowl': [{ img: salad, cap: 'Crunch chicken salad' }],
+  'salad-bowl': [{ img: bulgogiSalad, cap: 'Grilled Bulgogi Salad' }],
   'cool-salad': [{ img: salad, cap: 'Crunch chicken salad' }],
   'party-platter': [{ img: table, cap: 'A Kitchen 121 table spread' }],
 };

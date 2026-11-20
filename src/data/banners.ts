@@ -1,8 +1,8 @@
 // Wide banner images, all the restaurant's own: Home is their photo (DSC02275) widened and relit with Higgsfield,
 // food unchanged. Menu: their table-spread photo. Catering: a frame from their food video. Locations: their
-// dining-room photo (DSC02348) recomposed wide with Higgsfield so the whole wall sign and the food fit the
+// dining-room photo (DSC02348) re-made wide and relit with Higgsfield (warm, no-flash light like the home banner) so the whole wall sign and the food fit the
 // short banner (sides extended, then upscaled; extra-wide file so phones' narrow crop stays sharp).
-// All four are graded to the same brightness, contrast, saturation and warmth.
+// Menu and Catering are lightly graded to a shared look; Home and Locations are used as made.
 import home1 from '../assets/banners/home-1280.webp';
 import home2 from '../assets/banners/home-2400.webp';
 import menu1 from '../assets/banners/menu-1280.webp';

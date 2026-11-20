@@ -15,20 +15,21 @@ import bowl from '../assets/home/bulgogi-bowl.webp';
 import table from '../assets/home/table.webp';
 import salad from '../assets/home/salad.webp';
 import spread from '../assets/home/spread.webp';
+import bulgogiSalad from '../assets/home/bulgogi-salad.webp';
 const hero = BANNERS.home;
 const all = [...MENUS.duluth, ...MENUS['hamilton-mill']];
 const from = (ids: string[]) => Math.min(...all.filter((s) => ids.includes(s.id)).flatMap((s) => s.items.map((i) => i.p)));
 const dishes = [
   { img: red, name: '121 Signature Chicken', note: 'A 1.5 lb chicken breast, fried crisp, with a hand-made sauce. Eight flavors.', price: from(['signature-chicken']) },
   { img: roll, name: '121 Rolls', note: 'The 121 special rolls, rainbow, caterpillar, spicy tuna and more.', price: from(['roll']) },
-  { img: bowl, name: 'Bowls & Salads', note: 'Hot bowls, sushi and poke bowls, house salads.', price: from(['hot-bowl', 'sushi-bowl', 'salad-bowl', 'cool-salad']) },
+  { img: bulgogiSalad, name: 'Bowls & Salads', note: 'Hot bowls, sushi and poke bowls, house salads.', price: from(['hot-bowl', 'sushi-bowl', 'salad-bowl', 'cool-salad']) },
 ];
 const five = [
   { img: red, name: 'Red Pepper Chicken', note: '121 Signature Chicken', price: 17 },
   { img: soy, name: 'Oriental Soy Garlic', note: '121 Signature Chicken', price: 17 },
   { img: roll, name: '121 Rolls', note: 'Special and classic rolls', price: from(['roll']) },
   { img: bowl, name: 'Hot Bowls', note: 'Over seasoned rice, sunny side up', price: from(['hot-bowl']) },
-  { img: salad, name: 'Crunch Chicken Salad', note: 'House salads and poke', price: from(['cool-salad', 'salad-bowl']) },
+  { img: bulgogiSalad, name: 'Grilled Bulgogi Salad', note: 'Salad bowls', price: 16 },
 ];
 const insta = [soy, roll, spread, red, bowl, salad];
 const ICON = {

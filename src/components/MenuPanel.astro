@@ -6,20 +6,19 @@ import red from '../assets/home/red-pepper.webp';
 import soy from '../assets/home/soy-garlic.webp';
 import roll from '../assets/home/roll.webp';
 import bowl from '../assets/home/bulgogi-bowl.webp';
-import salad from '../assets/home/salad.webp';
 import table from '../assets/home/table.webp';
 import bulgogiSalad from '../assets/home/bulgogi-salad-overhead.webp';
 import rollMenu from '../assets/home/roll-menu.webp';
 import rollMenuPhone from '../assets/home/roll-menu-phone.webp';
+import crunchChicken from '../assets/home/crunch-fried-chicken.webp';
 interface Props { section: Section; prefix: string }
 const { section: s, prefix } = Astro.props;
 // phone: an optional different photo for phone-width screens (same strip slot).
 const REAL: Record<string, { img: ImageMetadata; cap: string; phone?: ImageMetadata }[]> = {
-  'signature-chicken': [{ img: red, cap: 'Red Pepper Chicken' }, { img: soy, cap: 'Oriental Soy Garlic Chicken' }],
+  'signature-chicken': [{ img: red, cap: 'Red Pepper Chicken' }, { img: soy, cap: 'Oriental Soy Garlic Chicken' }, { img: crunchChicken, cap: 'Crunch Fried Chicken' }],
   'roll': [{ img: rollMenu, phone: rollMenuPhone, cap: 'Crunch roll with orange tobiko' }],
   'hot-bowl': [{ img: bowl, cap: 'Bulgogi bowl' }],
   'salad-bowl': [{ img: bulgogiSalad, cap: 'Grilled Bulgogi Salad' }],
-  'cool-salad': [{ img: salad, cap: 'Crunch chicken salad' }],
   'party-platter': [{ img: table, cap: 'A Kitchen 121 table spread' }],
 };
 const photos = REAL[s.id] ?? [];
@@ -56,6 +55,7 @@ const photos = REAL[s.id] ?? [];
   .note b { color: var(--green); font-weight: 600; white-space: nowrap; }
   .strip { display: flex; gap: 10px; margin-top: 1.6rem; }
   .strip picture { display: contents; }
+  .strip source { display: none; }
   .strip img { flex: 1; min-width: 0; width: 0; height: clamp(120px, 18vw, 220px); object-fit: cover; border-radius: 4px; background: #eee; }
   .list { list-style: none; margin: 1.4rem 0 0; padding: 0; columns: 2; column-gap: clamp(2rem, 5vw, 4.5rem); }
   .list li { break-inside: avoid; padding: .8rem 0; border-bottom: 1px solid var(--rule); }
